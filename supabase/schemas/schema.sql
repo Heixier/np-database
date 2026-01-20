@@ -9,6 +9,14 @@ create table users (
 create table posts (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade,
+	title text not null,
+	content text not null,
+	created_at timestamp with time zone default now()
+);
+
+create table chats (
+	id uuid primary key default uuid_generate_v4(),
+	user_id uuid references users (id) on delete cascade,
 	content text not null,
 	created_at timestamp with time zone default now()
 );
@@ -21,12 +29,14 @@ create table comments (
 	created_at timestamp with time zone default now()
 );
 
-create table messages (
+create table notifications (
 	id uuid primary key default uuid_generate_v4(),
-	user_id uuid references users (id) on delete cascade, -- sender
-	recipient_id uuid references users (id) on delete cascade,
-	content text,
-	created_at timestamp with time zone default now()
+	user_id uuid references users (id) on delete cascade,
+	sender_id uuid references users (id) on delete cascade,
+	"type" text not null,
+	content text not null,
+	"read" boolean default false,
+	created_at timestamp with time zone default now() 
 );
 
 create table follows (
@@ -42,16 +52,6 @@ create table likes (
 	primary key (post_id, user_id)
 );
 
-create table notifications (
-	id uuid primary key default uuid_generate_v4(),
-	user_id uuid references users (id) on delete cascade,
-	sender_id uuid references users (id) on delete cascade,
-	"type" text not null,
-	content text not null,
-	"read" boolean default false,
-	created_at timestamp with time zone default now() 
-);
-
 create view notifications_with_sender_name as
 	select notifications.*, users.username as sender_name from notifications left join users on users.id = notifications.sender_id;
 
@@ -60,14 +60,38 @@ create view post_stats as
 	(select count(*) from likes where post_id = posts.id) as like_count
 from posts left join users on posts.user_id = users.id;
 
-create or replace view user_stats as 
-	select id, username, (select count(*) from follows where u.id = following_id) as follower_count,
-	(select count(*) from follows where u.id = follower_id) as following_count,
-	(select count(*) from notifications where u.id = user_id and "read" = false) as unread_notifications
-from users u;
+create or replace view user_view as
+-- Table that holds all the user_ids of users who are followed + count for each
+with follower_counts as (
+	select following_id, count(*) as follower_count
+	from follows
+	group by following_id
+),
+-- Table that holds all the user_ids of users who are following (which one is creepier?)
+following_counts as (
+	select follower_id, count(*) as following_count
+	from follows
+	group by follower_id
+),
+notification_counts as (
+	select user_id, count(*) as unread_notifications from notifications where read = false
+	group by user_id
+)
+select
+	users.id,
+	users.bio,
+	users.username,
+	-- otherwise those with no followers end up with null which makes my frontend harder
+	coalesce(follower_counts.follower_count, 0) as follower_count,
+	coalesce(following_counts.following_count, 0) as following_count,
+	coalesce(notification_counts.unread_notifications, 0) as unread_notifications
+from users
+left join follower_counts on users.id = follower_counts.following_id
+left join following_counts on users.id = following_counts.follower_id
+left join notification_counts on users.id = notification_counts.user_id;
 
 -- every time a new entry is added into likes, so NEW would be the new row in likes
--- what does likes have? message_id and user_id. The sender's user_id is inside messages.user_id
+-- what does likes have? message_id and user_id. The sender's user_id is inside posts.user_id
 create or replace function create_like_notification()
 returns trigger language plpgsql as $$
 declare
@@ -117,3 +141,11 @@ create or replace trigger trigger_follow_notification
 	after insert on follows
 	for each row
 	execute function create_follow_notification();
+
+create or replace function follower_count(users) returns bigint language sql as $$
+	select count(*) from follows where $1.id = following_id;
+$$;
+
+create or replace function post_like_count(posts) returns bigint language sql as $$
+	select count(*) from likes where $1.id = post_id;
+$$;

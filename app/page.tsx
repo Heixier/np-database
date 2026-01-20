@@ -1,10 +1,13 @@
-import { redisTest } from "./actions";
+import Posts from "./posts/posts";
+import Users from "./users/users";
 
 export default async function Home() {
-  const redisData = await redisTest();
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div>{redisData}</div>
+    <main className="w-full h-screen grid gap-4 grid-cols-1 sm:grid-cols-2 items-right">
+      <Posts />
+      <Users />
+      <Posts />
+      <Posts />
     </main>
   );
 }

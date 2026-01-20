@@ -1,3 +1,5 @@
+"use server";
+
 import { createRedisClient } from "@/lib/redis/client";
 
 export const redisTest = async () => {
