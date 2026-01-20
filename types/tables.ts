@@ -1,0 +1,1 @@
+// import { Tables } from "./supabase";
