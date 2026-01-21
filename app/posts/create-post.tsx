@@ -13,14 +13,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { createPost } from "./actions";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreatePostButton(props: { user_id: string }) {
   if (!props.user_id) return <Button disabled>Create Post</Button>;
 
+  const router = useRouter();
+
   const [open, setOpen] = useState(false);
+  const [title, setPostTitle] = useState("");
+  const [content, setPostContent] = useState("");
 
   const handlePostCreation = async () => {
     setOpen(false);
+	createPost({ user_id: props.user_id, title: title, content: content })
+	router.refresh();
   };
 
   return (
@@ -28,23 +35,19 @@ export default function CreatePostButton(props: { user_id: string }) {
       <DialogTrigger asChild>
         <Button variant="outline">Create Post</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md">	
         <DialogHeader>
           <DialogTitle>Create new post</DialogTitle>
         </DialogHeader>
         <div className="flex items-center gap-2">
           <div className="grid flex-1 gap-2">
-            <Input id="post" placeholder="Enter post contents here"></Input>
+            <Input value={title} placeholder="Enter post title" onChange={(e) => setPostTitle(e.target.value)} />
+            <Input value={content} placeholder="Enter post contents" onChange={(e) => setPostContent(e.target.value)}></Input>
           </div>
         </div>
         <DialogFooter className="sm:justify-start"></DialogFooter>
         <Button
-          onClick={() => {
-            createPost({
-              user_id: props.user_id,
-              content: "Hello world",
-            });
-          }}
+          onClick={handlePostCreation}
         >
           Create Post
         </Button>
