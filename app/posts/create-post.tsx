@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,16 +12,19 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { createPost } from "./actions";
-import { cookies } from "next/headers";
+import { useState } from "react";
 
-export default async function CreatePostButton() {
-  const cookieStore = await cookies();
-  const currentUser = cookieStore.get("user_id")?.value;
+export default function CreatePostButton(props: { user_id: string }) {
+  if (!props.user_id) return <Button disabled>Create Post</Button>;
 
-  if (!currentUser) return <Button disabled>Create Post</Button>;
+  const [open, setOpen] = useState(false);
+
+  const handlePostCreation = async () => {
+    setOpen(false);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Create Post</Button>
       </DialogTrigger>
@@ -36,11 +41,13 @@ export default async function CreatePostButton() {
         <Button
           onClick={() => {
             createPost({
-              user_id: currentUser,
+              user_id: props.user_id,
               content: "Hello world",
             });
           }}
-        ></Button>
+        >
+          Create Post
+        </Button>
         <DialogClose asChild>
           <Button type="button" variant="secondary">
             Close

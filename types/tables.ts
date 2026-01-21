@@ -5,4 +5,4 @@ export type Comment = Tables<"comments">;
 export type Chat = Tables<"chats">;
 export type Notificaton = Tables<"notifications">;
 export type User = Tables<"users">;
-export type UserStats = Tables<"user_stats">;
+export type UserView = Tables<"user_view">;

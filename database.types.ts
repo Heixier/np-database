@@ -58,7 +58,7 @@ export type Database = {
             foreignKeyName: "chats_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -111,7 +111,7 @@ export type Database = {
             foreignKeyName: "comments_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -141,7 +141,7 @@ export type Database = {
             foreignKeyName: "follows_follower_id_fkey"
             columns: ["follower_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -155,7 +155,7 @@ export type Database = {
             foreignKeyName: "follows_following_id_fkey"
             columns: ["following_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -199,7 +199,7 @@ export type Database = {
             foreignKeyName: "likes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -244,7 +244,7 @@ export type Database = {
             foreignKeyName: "notifications_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -258,7 +258,7 @@ export type Database = {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -298,7 +298,7 @@ export type Database = {
             foreignKeyName: "posts_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -347,7 +347,7 @@ export type Database = {
             foreignKeyName: "notifications_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -361,7 +361,7 @@ export type Database = {
             foreignKeyName: "notifications_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -388,7 +388,7 @@ export type Database = {
             foreignKeyName: "posts_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "user_stats"
+            referencedRelation: "user_view"
             referencedColumns: ["id"]
           },
           {
@@ -400,27 +400,14 @@ export type Database = {
           },
         ]
       }
-      user_stats: {
+      user_view: {
         Row: {
+          bio: string | null
           follower_count: number | null
           following_count: number | null
           id: string | null
           unread_notifications: number | null
           username: string | null
-        }
-        Insert: {
-          follower_count?: never
-          following_count?: never
-          id?: string | null
-          unread_notifications?: never
-          username?: string | null
-        }
-        Update: {
-          follower_count?: never
-          following_count?: never
-          id?: string | null
-          unread_notifications?: never
-          username?: string | null
         }
         Relationships: []
       }

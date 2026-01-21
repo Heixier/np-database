@@ -1,9 +1,12 @@
+import { cookies } from "next/headers";
 import CreatePostButton from "./create-post";
 import { fetchAllPosts } from "./fetch";
 import { PostWithCommentsAndUsernames } from "@/types/extend";
 
 export default async function Posts() {
   const { data, error } = await fetchAllPosts();
+  const cookieStore = await cookies();
+  const currentUserId = cookieStore.get("user_id")?.value;
 
   if (error) return <div>Database error: {error.message}</div>;
   if (!data) return <div>No posts to show</div>;
@@ -13,7 +16,7 @@ export default async function Posts() {
   return (
     <div className="h-full overflow-y-auto border-2 border-solid rounded-lg text-pretty">
       <h1>Posts</h1>
-      <CreatePostButton />
+      <CreatePostButton user_id={currentUserId ?? ""} />
       {posts.map((post) => (
         <div key={post.id}>
           <h2>{post.title}</h2>
