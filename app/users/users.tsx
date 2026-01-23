@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { fetchAllUsers } from "./fetch";
 import SwitchUserButton from "./switch_user";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function Users() {
   const { data, error } = await fetchAllUsers();
@@ -11,8 +12,10 @@ export default async function Users() {
   if (!data) return <div>No Users Found</div>;
 
   return (
-    <div className="h-full overflow-y-auto border-2 border-solid rounded-lg text-pretty">
-      <h1>Users</h1>
+    <Card className="h-full overflow-y-auto">
+      <CardHeader>
+        <CardTitle>Users</CardTitle>
+      </CardHeader>
       {data.map((users) => (
         <div key={users.id}>
           <div className="flex flex-row gap-4">
@@ -27,6 +30,6 @@ export default async function Users() {
       ))}
 
       {JSON.stringify(data)}
-    </div>
+    </Card>
   );
 }

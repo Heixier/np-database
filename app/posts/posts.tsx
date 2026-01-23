@@ -2,36 +2,26 @@ import { cookies } from "next/headers";
 import CreatePostButton from "./create-post";
 import { fetchAllPosts } from "./fetch";
 import { PostWithCommentsAndUsernames } from "@/types/extend";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import PostCard from "./post-card";
 
-export default async function Posts() {
-  const { data, error } = await fetchAllPosts();
+export default async function zPosts() {
+  const { data: posts, error } = await fetchAllPosts();
   const cookieStore = await cookies();
   const currentUserId = cookieStore.get("user_id")?.value;
 
   if (error) return <div>Database error: {error.message}</div>;
-  if (!data) return <div>No posts to show</div>;
-
-  const posts = data as PostWithCommentsAndUsernames[];
+  if (!posts) return <div>No posts to show</div>;
 
   return (
-    <div className="h-full overflow-y-auto border-2 border-solid rounded-lg text-pretty">
-      <h1>Posts</h1>
-      <CreatePostButton user_id={currentUserId ?? ""} />
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h2>{post.title}</h2>
-          <p>Post contents: {post.content}</p>
-          <h3>Comments:</h3>
-          {post.comments.map((comment) => (
-            <div key={comment.id}>
-              <p key={comment.id}>
-                Commenter name: {comment.users?.username ?? "anon"}
-              </p>
-              <p>Comment: {comment.content}</p>
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+    <Card className="h-full overflow-y-auto">
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-2xl">Posts</CardTitle>
+        <CreatePostButton user_id={currentUserId ?? ""} />
+      </CardHeader>
+      <Separator />
+      <PostCard posts={posts} />
+    </Card>
   );
 }

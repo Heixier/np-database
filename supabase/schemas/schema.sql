@@ -26,14 +26,21 @@ create table comments (
 	post_id uuid references posts (id) on delete cascade,
 	user_id uuid references users (id) on delete cascade,
 	content text not null,
+	replying_to uuid references comments(id),
 	created_at timestamp with time zone default now()
+);
+
+create type notification_type as enum (
+	'like',
+	'follow',
+	'heartbreak'
 );
 
 create table notifications (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade,
 	sender_id uuid references users (id) on delete cascade,
-	"type" text not null,
+	"type" notification_type not null,
 	content text not null,
 	"read" boolean default false,
 	created_at timestamp with time zone default now() 
@@ -52,13 +59,22 @@ create table likes (
 	primary key (post_id, user_id)
 );
 
+-- Frequently accessed indexes
+create index idx_posts_user_id on posts(user_id);
+create index idx_comments_post_id on comments(post_id);
+
 create view notifications_with_sender_name as
 	select notifications.*, users.username as sender_name from notifications left join users on users.id = notifications.sender_id;
 
-create view post_stats as
-	select posts.*, users.username as username,
-	(select count(*) from likes where post_id = posts.id) as like_count
-from posts left join users on posts.user_id = users.id;
+create view post_view as
+with like_counts as (
+	select post_id, count(*) as likes from likes
+	group by post_id
+)
+select posts.*, users.username as username, like_counts.likes as likes
+from posts
+left join users on posts.user_id = users.id
+left join like_counts on posts.id = like_counts.post_id;
 
 create or replace view user_view as
 -- Table that holds all the user_ids of users who are followed + count for each

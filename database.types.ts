@@ -76,6 +76,7 @@ export type Database = {
           created_at: string | null
           id: string
           post_id: string | null
+          replying_to: string | null
           user_id: string | null
         }
         Insert: {
@@ -83,6 +84,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           post_id?: string | null
+          replying_to?: string | null
           user_id?: string | null
         }
         Update: {
@@ -90,6 +92,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           post_id?: string | null
+          replying_to?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -97,7 +100,7 @@ export type Database = {
             foreignKeyName: "comments_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "post_stats"
+            referencedRelation: "post_view"
             referencedColumns: ["id"]
           },
           {
@@ -105,6 +108,13 @@ export type Database = {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_replying_to_fkey"
+            columns: ["replying_to"]
+            isOneToOne: false
+            referencedRelation: "comments"
             referencedColumns: ["id"]
           },
           {
@@ -185,7 +195,7 @@ export type Database = {
             foreignKeyName: "likes_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "post_stats"
+            referencedRelation: "post_view"
             referencedColumns: ["id"]
           },
           {
@@ -218,7 +228,7 @@ export type Database = {
           id: string
           read: boolean | null
           sender_id: string | null
-          type: string
+          type: Database["public"]["Enums"]["notification_type"]
           user_id: string | null
         }
         Insert: {
@@ -227,7 +237,7 @@ export type Database = {
           id?: string
           read?: boolean | null
           sender_id?: string | null
-          type: string
+          type: Database["public"]["Enums"]["notification_type"]
           user_id?: string | null
         }
         Update: {
@@ -236,7 +246,7 @@ export type Database = {
           id?: string
           read?: boolean | null
           sender_id?: string | null
-          type?: string
+          type?: Database["public"]["Enums"]["notification_type"]
           user_id?: string | null
         }
         Relationships: [
@@ -339,7 +349,7 @@ export type Database = {
           read: boolean | null
           sender_id: string | null
           sender_name: string | null
-          type: string | null
+          type: Database["public"]["Enums"]["notification_type"] | null
           user_id: string | null
         }
         Relationships: [
@@ -373,12 +383,12 @@ export type Database = {
           },
         ]
       }
-      post_stats: {
+      post_view: {
         Row: {
           content: string | null
           created_at: string | null
           id: string | null
-          like_count: number | null
+          likes: number | null
           title: string | null
           user_id: string | null
           username: string | null
@@ -427,7 +437,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      notification_type: "like" | "follow" | "heartbreak"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -557,7 +567,9 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      notification_type: ["like", "follow", "heartbreak"],
+    },
   },
 } as const
 
