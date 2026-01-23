@@ -37,19 +37,19 @@ export type Database = {
       chats: {
         Row: {
           content: string
-          created_at: string | null
+          created_at: string
           id: string
           user_id: string | null
         }
         Insert: {
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           user_id?: string | null
         }
         Update: {
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           user_id?: string | null
         }
@@ -73,7 +73,7 @@ export type Database = {
       comments: {
         Row: {
           content: string
-          created_at: string | null
+          created_at: string
           id: string
           post_id: string | null
           replying_to: string | null
@@ -81,7 +81,7 @@ export type Database = {
         }
         Insert: {
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           post_id?: string | null
           replying_to?: string | null
@@ -89,7 +89,7 @@ export type Database = {
         }
         Update: {
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           post_id?: string | null
           replying_to?: string | null
@@ -283,7 +283,7 @@ export type Database = {
       posts: {
         Row: {
           content: string
-          created_at: string | null
+          created_at: string
           id: string
           title: string
           user_id: string | null
@@ -291,14 +291,14 @@ export type Database = {
         }
         Insert: {
           content: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           title: string
           user_id?: string | null
         }
         Update: {
           content?: string
-          created_at?: string | null
+          created_at?: string
           id?: string
           title?: string
           user_id?: string | null

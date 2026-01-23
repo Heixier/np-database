@@ -1,5 +1,11 @@
 create extension if not exists "uuid-ossp";
 
+create type notification_type as enum (
+	'like',
+	'follow',
+	'heartbreak'
+);
+
 create table users (
 	id uuid primary key default uuid_generate_v4(),
 	username text not null,
@@ -11,14 +17,14 @@ create table posts (
 	user_id uuid references users (id) on delete cascade,
 	title text not null,
 	content text not null,
-	created_at timestamp with time zone default now()
+	created_at timestamp with time zone default now() not null
 );
 
 create table chats (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade,
 	content text not null,
-	created_at timestamp with time zone default now()
+	created_at timestamp with time zone default now() not null
 );
 
 create table comments (
@@ -27,13 +33,7 @@ create table comments (
 	user_id uuid references users (id) on delete cascade,
 	content text not null,
 	replying_to uuid references comments(id),
-	created_at timestamp with time zone default now()
-);
-
-create type notification_type as enum (
-	'like',
-	'follow',
-	'heartbreak'
+	created_at timestamp with time zone default now() not null
 );
 
 create table notifications (
@@ -71,10 +71,13 @@ with like_counts as (
 	select post_id, count(*) as likes from likes
 	group by post_id
 )
-select posts.*, users.username as username, like_counts.likes as likes
+select posts.*, 
+users.username as username, 
+like_counts.likes as likes
 from posts
 left join users on posts.user_id = users.id
-left join like_counts on posts.id = like_counts.post_id;
+left join like_counts on posts.id = like_counts.post_id
+order by created_at desc;
 
 create or replace view user_view as
 -- Table that holds all the user_ids of users who are followed + count for each

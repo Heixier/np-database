@@ -7,13 +7,16 @@ export const fetchAllPosts = async () => {
 
   const cache = await redis.get("posts:all");
 
-  if (cache) return { data: JSON.parse(cache) as PostWithUserAndComments[], error: null };
+  if (cache)
+    return {
+      data: JSON.parse(cache) as PostWithUserAndComments[],
+      error: null,
+    };
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, users!user_id(username), comments(*, users!user_id(username) )")
-    .order("created_at", { ascending: false });
+    .select("*, comments (*, users (username))");
 
   await redis.set("posts:all", JSON.stringify(data), { EX: 60 });
 

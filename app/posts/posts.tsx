@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
 import CreatePostButton from "./create-post";
 import { fetchAllPosts } from "./fetch";
-import { PostWithCommentsAndUsernames } from "@/types/extend";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import PostCard from "./post-card";
+import { PostCard } from "./post-card";
 
 export default async function Posts() {
   const { data: posts, error } = await fetchAllPosts();
@@ -21,7 +20,9 @@ export default async function Posts() {
         <CreatePostButton user_id={currentUserId ?? ""} />
       </CardHeader>
       <Separator />
-      <PostCard posts={posts} />
+      <div className="flex flex-col px-4 gap-8">
+        <PostCard posts={posts} />
+      </div>
     </Card>
   );
 }
