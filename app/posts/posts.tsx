@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import PostCard from "./post-card";
 
-export default async function zPosts() {
+export default async function Posts() {
   const { data: posts, error } = await fetchAllPosts();
   const cookieStore = await cookies();
   const currentUserId = cookieStore.get("user_id")?.value;

@@ -5,8 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export const createPost = async (data: {
   user_id: string;
-  content: string;
   title: string;
+  content: string;
 }) => {
   const redis = await createRedisClient().connect();
   await redis.del("posts:all");

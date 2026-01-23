@@ -11,5 +11,5 @@ export default function SwitchUserButton(props: { user_id: string }) {
     setUserIdCookie(props.user_id);
     router.refresh();
   };
-  return <Button onClick={() => switchUser()}>Change User</Button>;
+  return <Button variant="outline" onClick={() => switchUser()}>Change User</Button>;
 }

@@ -1,4 +1,4 @@
-import { Post, User, Comment } from "./tables";
+import { Post, Comment } from "./tables";
 
 export type CommentWithUsername = Comment & {
   users: { username: string };
@@ -9,4 +9,15 @@ export type PostWithCommentsAndUsernames = Post & {
   comments: Array<CommentWithUsername>;
 };
 
-export type UserWithFollowCount = User;
+export interface UserUsername {
+	username: string | null
+}
+
+export interface CommentWithUser extends Comment {
+	users: UserUsername | null
+}
+
+export interface PostWithUserAndComments extends Post {
+	users: UserUsername | null
+	comments: CommentWithUser[] | null
+}
