@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 
+// BUG cookies can be set to a random user_id and pass the check, failing the disabled check
 export default function CreatePostButton(props: { user_id: string }) {
   if (!props.user_id) return <Button disabled>Create Post</Button>;
 

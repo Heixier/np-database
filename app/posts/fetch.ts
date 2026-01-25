@@ -16,7 +16,7 @@ export const fetchAllPosts = async () => {
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, comments (*, users (username))");
+    .select("*, users!user_id(username), comments (*, users (username))");
 
   await redis.set("posts:all", JSON.stringify(data), { EX: 60 });
 

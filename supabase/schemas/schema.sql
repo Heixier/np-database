@@ -9,14 +9,16 @@ create type notification_type as enum (
 create table users (
 	id uuid primary key default uuid_generate_v4(),
 	username text not null,
-	bio text
+	bio text,
+	follower_count numeric default 0 not null -- denormalised for performance; handled by triggers
 );
 
 create table posts (
 	id uuid primary key default uuid_generate_v4(),
-	user_id uuid references users (id) on delete cascade,
+	user_id uuid references users (id) on delete cascade not null,
 	title text not null,
 	content text not null,
+	like_count numeric default 0 not null,-- denormalised for performance; handled by triggers
 	created_at timestamp with time zone default now() not null
 );
 
@@ -29,8 +31,8 @@ create table chats (
 
 create table comments (
 	id uuid primary key default uuid_generate_v4(),
-	post_id uuid references posts (id) on delete cascade,
-	user_id uuid references users (id) on delete cascade,
+	post_id uuid references posts (id) on delete cascade not null,
+	user_id uuid references users (id) on delete cascade not null,
 	content text not null,
 	replying_to uuid references comments(id),
 	created_at timestamp with time zone default now() not null
@@ -38,24 +40,24 @@ create table comments (
 
 create table notifications (
 	id uuid primary key default uuid_generate_v4(),
-	user_id uuid references users (id) on delete cascade,
+	user_id uuid references users (id) on delete cascade not null,
 	sender_id uuid references users (id) on delete cascade,
-	"type" notification_type not null,
+	"type" notification_type not null, -- custom user type ;-;
 	content text not null,
 	"read" boolean default false,
 	created_at timestamp with time zone default now() 
 );
 
 create table follows (
-	follower_id uuid references users (id) on delete cascade,
-	following_id uuid references users (id) on delete cascade,
+	follower_id uuid references users (id) on delete cascade not null,
+	following_id uuid references users (id) on delete cascade not null,
 	constraint no_self_follow check (follower_id != following_id), -- will be disabled in the UI but just in case
 	primary key (follower_id, following_id)
 );
 
 create table likes (
-	post_id uuid references posts (id) on delete cascade,
-	user_id uuid references users (id) on delete cascade,
+	post_id uuid references posts (id) on delete cascade not null,
+	user_id uuid references users (id) on delete cascade not null,
 	primary key (post_id, user_id)
 );
 
@@ -64,7 +66,11 @@ create index idx_posts_user_id on posts(user_id);
 create index idx_comments_post_id on comments(post_id);
 
 create view notifications_with_sender_name as
-	select notifications.*, users.username as sender_name from notifications left join users on users.id = notifications.sender_id;
+	select notifications.*, 
+	users.username 
+	as sender_name 
+	from notifications 
+	left join users on users.id = notifications.sender_id;
 
 create view post_view as
 with like_counts as (
@@ -117,21 +123,21 @@ declare
 	author_id uuid;
 	reviewer_name text;
 	notification_content text;
-	notification_type text;
+	notif_type notification_type;
 begin
 	select user_id into author_id from posts where id = NEW.post_id;
 	select username into reviewer_name from users where id = NEW.user_id;
 	-- now to notify the sender
 	if author_id = NEW.user_id then
 		notification_content := 'You liked your own post';
-		notification_type := 'heartbreak'; -- because that's sad
+		notif_type := 'heartbreak'; -- because that's sad
 	else
 		notification_content := reviewer_name || ' liked one of your posts';
-		notification_type := 'like';
+		notif_type := 'like';
 	end if;
 		
 	insert into notifications (user_id, sender_id, "type", content)
-	values (author_id, NEW.user_id, notification_type, notification_content);
+	values (author_id, NEW.user_id, notif_type, notification_content);
 
 	return NEW;
 end;
@@ -161,10 +167,68 @@ create or replace trigger trigger_follow_notification
 	for each row
 	execute function create_follow_notification();
 
-create or replace function follower_count(users) returns bigint language sql as $$
-	select count(*) from follows where $1.id = following_id;
+create or replace function decrement_like_count()
+returns trigger language plpgsql as $$
+begin
+	update posts
+	set like_count = like_count - 1
+	where posts.id = OLD.post_id
+	and like_count > 0;
+
+	return OLD; -- useless but need to return something
+end
 $$;
 
-create or replace function post_like_count(posts) returns bigint language sql as $$
-	select count(*) from likes where $1.id = post_id;
+create or replace trigger trigger_decrement_like_count
+	after delete on likes
+	for each row
+	execute function decrement_like_count();
+
+create or replace function increment_like_count()
+returns trigger language plpgsql as $$
+begin
+	update posts
+	set like_count = like_count + 1
+	where posts.id = NEW.post_id;
+
+	return NEW;
+end
 $$;
+
+create or replace trigger trigger_increment_like_count
+	after insert on likes
+	for each row
+	execute function increment_like_count();
+
+create or replace function decrement_follower_count()
+returns trigger language plpgsql as $$
+begin
+	update users
+	set follower_count = follower_count - 1
+	where users.id = OLD.following_id
+	and follower_count > 0;
+
+	return OLD; -- useless but need to return something
+end
+$$;
+
+create or replace trigger trigger_decrement_follower_count
+	after delete on follows
+	for each row
+	execute function decrement_follower_count();
+
+create or replace function increment_follower_count()
+returns trigger language plpgsql as $$
+begin
+	update users
+	set follower_count = follower_count + 1
+	where users.id = NEW.following_id;
+
+	return NEW;
+end
+$$;
+
+create or replace trigger trigger_increment_follower_count
+	after insert on follows
+	for each row
+	execute function increment_follower_count();

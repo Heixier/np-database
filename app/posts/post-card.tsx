@@ -1,5 +1,11 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { CommentWithUser, PostWithUserAndComments } from "@/types/extend";
 import { InfoIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -51,14 +57,28 @@ function CommentCard(props: { comments: CommentWithUser[] | null }) {
 
 export function PostCard(props: { posts: PostWithUserAndComments[] }) {
   const { posts } = props;
-  return posts.map((post) => (
-    <div key={post.id}>
-      <h2>{post.title}</h2>
-      <p>Post contents: {post.content}</p>
-      <h3>Comments:</h3>
-      <div className="flex justify-left">
-        <CommentCard comments={post.comments}></CommentCard>
-      </div>
+  return (
+    <div className="w-full">
+      {posts.map((post) => (
+        <div key={post.id}>
+          <Card>
+            <CardHeader className="flex flex-row justify-between">
+              <CardTitle>{post.title}</CardTitle>
+              <Avatar>
+                <AvatarFallback className="text-xs">
+                  {post.users?.username?.substring(0, 2).toUpperCase() ?? "?"}
+                </AvatarFallback>
+              </Avatar>
+            </CardHeader>
+            <CardContent>
+              {post.content}
+              <div className="flex justify-left">
+                <CommentCard comments={post.comments}></CommentCard>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ))}
     </div>
-  ));
+  );
 }

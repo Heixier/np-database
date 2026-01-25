@@ -287,7 +287,6 @@ export type Database = {
           id: string
           title: string
           user_id: string | null
-          post_like_count: number | null
         }
         Insert: {
           content: string
@@ -325,7 +324,6 @@ export type Database = {
           bio: string | null
           id: string
           username: string
-          follower_count: number | null
         }
         Insert: {
           bio?: string | null
@@ -423,18 +421,7 @@ export type Database = {
       }
     }
     Functions: {
-      follower_count: {
-        Args: { "": Database["public"]["Tables"]["users"]["Row"] }
-        Returns: {
-          error: true
-        } & "the function public.follower_count with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache"
-      }
-      post_like_count: {
-        Args: { "": Database["public"]["Tables"]["posts"]["Row"] }
-        Returns: {
-          error: true
-        } & "the function public.post_like_count with parameter or with a single unnamed json/jsonb parameter, but no matches were found in the schema cache"
-      }
+      [_ in never]: never
     }
     Enums: {
       notification_type: "like" | "follow" | "heartbreak"

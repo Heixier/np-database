@@ -9,5 +9,6 @@ export interface CommentWithUser extends Comment {
 }
 
 export interface PostWithUserAndComments extends Post {
+  users: UserUsername | null;
   comments: CommentWithUser[] | null;
 }

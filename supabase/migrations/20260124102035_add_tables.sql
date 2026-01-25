@@ -12,8 +12,8 @@ create type "public"."notification_type" as enum ('like', 'follow', 'heartbreak'
 
   create table "public"."comments" (
     "id" uuid not null default extensions.uuid_generate_v4(),
-    "post_id" uuid,
-    "user_id" uuid,
+    "post_id" uuid not null,
+    "user_id" uuid not null,
     "content" text not null,
     "replying_to" uuid,
     "created_at" timestamp with time zone not null default now()
@@ -37,7 +37,7 @@ create type "public"."notification_type" as enum ('like', 'follow', 'heartbreak'
 
   create table "public"."notifications" (
     "id" uuid not null default extensions.uuid_generate_v4(),
-    "user_id" uuid,
+    "user_id" uuid not null,
     "sender_id" uuid,
     "type" public.notification_type not null,
     "content" text not null,
@@ -49,9 +49,10 @@ create type "public"."notification_type" as enum ('like', 'follow', 'heartbreak'
 
   create table "public"."posts" (
     "id" uuid not null default extensions.uuid_generate_v4(),
-    "user_id" uuid,
+    "user_id" uuid not null,
     "title" text not null,
     "content" text not null,
+    "like_count" numeric not null default 0,
     "created_at" timestamp with time zone not null default now()
       );
 
@@ -60,7 +61,8 @@ create type "public"."notification_type" as enum ('like', 'follow', 'heartbreak'
   create table "public"."users" (
     "id" uuid not null default extensions.uuid_generate_v4(),
     "username" text not null,
-    "bio" text
+    "bio" text,
+    "follower_count" numeric not null default 0
       );
 
 
@@ -156,7 +158,7 @@ begin
 	select username into follower_name from users where id = NEW.follower_id;
 
 	insert into notifications (user_id, sender_id, "type", content)
-	values (NEW.following_id, NEW.follower_id, 'new_follower', follower_name || ' is now following you');
+	values (NEW.following_id, NEW.follower_id, 'follow', follower_name || ' is now following you');
 
 	return NEW;
 end;
@@ -171,32 +173,82 @@ declare
 	author_id uuid;
 	reviewer_name text;
 	notification_content text;
-	notification_type text;
+	notif_type notification_type;
 begin
 	select user_id into author_id from posts where id = NEW.post_id;
 	select username into reviewer_name from users where id = NEW.user_id;
 	-- now to notify the sender
 	if author_id = NEW.user_id then
 		notification_content := 'You liked your own post';
-		notification_type := 'heartbreak'; -- because that's sad
+		notif_type := 'heartbreak'; -- because that's sad
 	else
 		notification_content := reviewer_name || ' liked one of your posts';
-		notification_type := 'like';
+		notif_type := 'like';
 	end if;
 		
 	insert into notifications (user_id, sender_id, "type", content)
-	values (author_id, NEW.user_id, notification_type, notification_content);
+	values (author_id, NEW.user_id, notif_type, notification_content);
 
 	return NEW;
 end;
 $function$
 ;
 
-CREATE OR REPLACE FUNCTION public.follower_count(public.users)
- RETURNS bigint
- LANGUAGE sql
+CREATE OR REPLACE FUNCTION public.decrement_follower_count()
+ RETURNS trigger
+ LANGUAGE plpgsql
 AS $function$
-	select count(*) from follows where $1.id = following_id;
+begin
+	update users
+	set follower_count = follower_count - 1
+	where users.id = OLD.following_id
+	and follower_count > 0;
+
+	return OLD; -- useless but need to return something
+end
+$function$
+;
+
+CREATE OR REPLACE FUNCTION public.decrement_like_count()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+begin
+	update posts
+	set like_count = like_count - 1
+	where posts.id = OLD.post_id
+	and like_count > 0;
+
+	return OLD; -- useless but need to return something
+end
+$function$
+;
+
+CREATE OR REPLACE FUNCTION public.increment_follower_count()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+begin
+	update users
+	set follower_count = follower_count + 1
+	where users.id = NEW.following_id;
+
+	return NEW;
+end
+$function$
+;
+
+CREATE OR REPLACE FUNCTION public.increment_like_count()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+begin
+	update posts
+	set like_count = like_count + 1
+	where posts.id = NEW.post_id;
+
+	return NEW;
+end
 $function$
 ;
 
@@ -212,14 +264,6 @@ create or replace view "public"."notifications_with_sender_name" as  SELECT noti
      LEFT JOIN public.users ON ((users.id = notifications.sender_id)));
 
 
-CREATE OR REPLACE FUNCTION public.post_like_count(public.posts)
- RETURNS bigint
- LANGUAGE sql
-AS $function$
-	select count(*) from likes where $1.id = post_id;
-$function$
-;
-
 create or replace view "public"."post_view" as  WITH like_counts AS (
          SELECT likes.post_id,
             count(*) AS likes
@@ -230,6 +274,7 @@ create or replace view "public"."post_view" as  WITH like_counts AS (
     posts.user_id,
     posts.title,
     posts.content,
+    posts.like_count,
     posts.created_at,
     users.username,
     like_counts.likes
@@ -562,7 +607,15 @@ grant truncate on table "public"."users" to "service_role";
 
 grant update on table "public"."users" to "service_role";
 
+CREATE TRIGGER trigger_decrement_follower_count AFTER DELETE ON public.follows FOR EACH ROW EXECUTE FUNCTION public.decrement_follower_count();
+
 CREATE TRIGGER trigger_follow_notification AFTER INSERT ON public.follows FOR EACH ROW EXECUTE FUNCTION public.create_follow_notification();
+
+CREATE TRIGGER trigger_increment_follower_count AFTER INSERT ON public.follows FOR EACH ROW EXECUTE FUNCTION public.increment_follower_count();
+
+CREATE TRIGGER trigger_decrement_like_count AFTER DELETE ON public.likes FOR EACH ROW EXECUTE FUNCTION public.decrement_like_count();
+
+CREATE TRIGGER trigger_increment_like_count AFTER INSERT ON public.likes FOR EACH ROW EXECUTE FUNCTION public.increment_like_count();
 
 CREATE TRIGGER trigger_like_notification AFTER INSERT ON public.likes FOR EACH ROW EXECUTE FUNCTION public.create_like_notification();
 

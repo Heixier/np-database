@@ -1,4 +1,4 @@
-import { Tables } from "@/database.types";
+import { Tables } from "./supabase";
 
 export type Post = Tables<"posts">;
 export type Comment = Tables<"comments">;
