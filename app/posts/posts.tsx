@@ -8,10 +8,10 @@ import { PostCard } from "./post-card";
 export default async function Posts() {
   const { data: posts, error } = await fetchAllPosts();
   const cookieStore = await cookies();
-  const currentUserId = cookieStore.get("user_id")?.value;
+  const currentUserId = cookieStore.get("user_id")?.value ?? "";
 
   if (error) return <div>Database error: {error.message}</div>;
-  if (!posts) return <div>No posts to show</div>;
+  if (!currentUserId) return <div>No user selected</div>;
 
   return (
     <Card className="h-full overflow-y-auto">
@@ -21,7 +21,7 @@ export default async function Posts() {
       </CardHeader>
       <Separator />
       <div className="flex flex-col px-4 gap-8">
-        <PostCard posts={posts} />
+        <PostCard currentUserId={currentUserId} posts={posts ?? []} />
       </div>
     </Card>
   );

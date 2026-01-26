@@ -13,6 +13,16 @@ create table users (
 	follower_count numeric default 0 not null -- denormalised for performance; handled by triggers
 );
 
+alter table users
+enable row level security;
+
+create policy "Allow full access on users table"
+on users
+for all
+to anon
+using (true);
+
+
 create table posts (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade not null,
@@ -22,12 +32,32 @@ create table posts (
 	created_at timestamp with time zone default now() not null
 );
 
+alter table posts
+enable row level security;
+
+create policy "Allow full access on posts table"
+on posts
+for all
+to anon
+using (true);
+
+
 create table chats (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade,
 	content text not null,
 	created_at timestamp with time zone default now() not null
 );
+
+alter table chats
+enable row level security;
+
+create policy "Allow full access on chats table"
+on chats
+for all
+to anon
+using (true);
+
 
 create table comments (
 	id uuid primary key default uuid_generate_v4(),
@@ -37,6 +67,16 @@ create table comments (
 	replying_to uuid references comments(id),
 	created_at timestamp with time zone default now() not null
 );
+
+alter table comments
+enable row level security;
+
+create policy "Allow full access on comments table"
+on comments
+for all
+to anon
+using (true);
+
 
 create table notifications (
 	id uuid primary key default uuid_generate_v4(),
@@ -48,6 +88,16 @@ create table notifications (
 	created_at timestamp with time zone default now() 
 );
 
+alter table notifications
+enable row level security;
+
+create policy "Allow full access on notifications table"
+on notifications
+for all
+to anon
+using (true);
+
+
 create table follows (
 	follower_id uuid references users (id) on delete cascade not null,
 	following_id uuid references users (id) on delete cascade not null,
@@ -55,11 +105,30 @@ create table follows (
 	primary key (follower_id, following_id)
 );
 
+alter table follows
+enable row level security;
+
+create policy "Allow full access on follows table"
+on follows
+for all
+to anon
+using (true);
+
+
 create table likes (
 	post_id uuid references posts (id) on delete cascade not null,
 	user_id uuid references users (id) on delete cascade not null,
 	primary key (post_id, user_id)
 );
+
+alter table likes
+enable row level security;
+
+create policy "Allow full access on likes table"
+on likes
+for all
+to anon
+using (true);
 
 -- Frequently accessed indexes
 create index idx_posts_user_id on posts(user_id);
