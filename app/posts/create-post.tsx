@@ -18,19 +18,15 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { DialogDescription } from "@radix-ui/react-dialog";
 
-// BUG cookies can be set to a random user_id and pass the check, failing the disabled check
-export default function CreatePostButton(props: { user_id: string }) {
-  if (!props.user_id) return <Button disabled>Create Post</Button>;
-
+export default function CreatePostButton({ userId }: { userId: string }) {
   const [open, setOpen] = useState(false);
   const [postContents, setPostContents] = useState("");
   const [titleContents, setTItleContents] = useState("");
 
   const handlePostCreation = async () => {
     await createPost({
-      user_id: props.user_id,
+      user_id: userId,
       title: titleContents,
       content: postContents,
     });
@@ -40,20 +36,24 @@ export default function CreatePostButton(props: { user_id: string }) {
     setTItleContents("");
   };
 
+  const handleSetOpen = async (open: boolean) => {
+    setOpen(open);
+    setPostContents("");
+    setTItleContents("");
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleSetOpen}>
       <DialogTrigger asChild>
-        <Button disabled={!props.user_id} variant="outline">
+        <Button
+          disabled={!userId}
+          className="text-black/80 from-orange-400/60 via-orange-200 to-orange-400/60 bg-transparent bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500"
+        >
           Create Post
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
-        <DialogTitle className="sr-only">
-          Create Post Dialog Window
-          <DialogDescription>
-            Dialog window for creating posts with title and content input fields
-          </DialogDescription>
-        </DialogTitle>
+        <DialogTitle className="sr-only"></DialogTitle>
         <FieldSet className="w-full max-w-sm">
           <FieldLegend className="font-bold">Create Post</FieldLegend>
           <Field>
@@ -61,7 +61,7 @@ export default function CreatePostButton(props: { user_id: string }) {
             <Input
               id="post_title"
               type="text"
-              placeholder="I totally love frontend design"
+              placeholder="Enter post title"
               value={titleContents}
               onChange={(e) => {
                 setTItleContents(e.target.value);
@@ -72,7 +72,7 @@ export default function CreatePostButton(props: { user_id: string }) {
             <FieldLabel htmlFor="post_contents">Post Contents</FieldLabel>
             <Textarea
               id="post_contents"
-              placeholder="Enter post contents here"
+              placeholder="Enter post contents"
               value={postContents}
               onChange={(e) => {
                 setPostContents(e.target.value);

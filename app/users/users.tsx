@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
 import { fetchAllUsers } from "./fetch";
-import SwitchUserButton from "./switch_user";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserCard } from "./user-card";
+import UsersAndFollowsListener from "./listener";
+import { CreateUser } from "./create-user";
 
 export default async function Users() {
   const { data, error } = await fetchAllUsers();
@@ -12,24 +14,24 @@ export default async function Users() {
   if (!data) return <div>No Users Found</div>;
 
   return (
-    <Card className="h-full overflow-y-auto">
-      <CardHeader>
-        <CardTitle>Users</CardTitle>
+    <Card className="h-full min-w-0 px-8 overflow-y-auto">
+      <UsersAndFollowsListener />
+      <CardHeader className="flex flex-row items-center justify-between">
+        <CardTitle className="text-2xl">Users</CardTitle>
+        <CreateUser />
       </CardHeader>
-      {data.map((users) => (
-        <div key={users.id}>
-          <div className="flex flex-row gap-4">
-            <SwitchUserButton user_id={users.id ?? ""} />
-            <div>
-              Username: {users.username}
-              {users.id === currentUserId?.value ? "(Current User)" : ""}
+      <Card className="min-w-0 px-4 overflow-y-auto">
+        {data.map((user) => (
+          <div key={user.id}>
+            <div className="flex flex-row gap-4">
+              <UserCard
+                currentUserId={currentUserId?.value ?? ""}
+                user={user}
+              ></UserCard>
             </div>
-            <div>Bio: {users.bio}</div>
           </div>
-        </div>
-      ))}
-
-      {JSON.stringify(data)}
+        ))}
+      </Card>
     </Card>
   );
 }

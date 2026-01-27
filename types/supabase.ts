@@ -75,25 +75,25 @@ export type Database = {
           content: string
           created_at: string
           id: string
-          post_id: string | null
+          post_id: string
           replying_to: string | null
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
-          post_id?: string | null
+          post_id: string
           replying_to?: string | null
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
-          post_id?: string | null
+          post_id?: string
           replying_to?: string | null
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -229,7 +229,7 @@ export type Database = {
           read: boolean | null
           sender_id: string | null
           type: Database["public"]["Enums"]["notification_type"]
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           content: string
@@ -238,7 +238,7 @@ export type Database = {
           read?: boolean | null
           sender_id?: string | null
           type: Database["public"]["Enums"]["notification_type"]
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           content?: string
@@ -247,7 +247,7 @@ export type Database = {
           read?: boolean | null
           sender_id?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -285,22 +285,25 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          like_count: number
           title: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
+          like_count?: number
           title: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
+          like_count?: number
           title?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -322,16 +325,19 @@ export type Database = {
       users: {
         Row: {
           bio: string | null
+          follower_count: number
           id: string
           username: string
         }
         Insert: {
           bio?: string | null
+          follower_count?: number
           id?: string
           username: string
         }
         Update: {
           bio?: string | null
+          follower_count?: number
           id?: string
           username?: string
         }
@@ -386,6 +392,7 @@ export type Database = {
           content: string | null
           created_at: string | null
           id: string | null
+          like_count: number | null
           likes: number | null
           title: string | null
           user_id: string | null

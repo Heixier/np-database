@@ -10,7 +10,8 @@ create table users (
 	id uuid primary key default uuid_generate_v4(),
 	username text not null,
 	bio text,
-	follower_count numeric default 0 not null -- denormalised for performance; handled by triggers
+	follower_count numeric default 0 not null, -- denormalised for performance; handled by triggers
+	unique(username)
 );
 
 alter table users

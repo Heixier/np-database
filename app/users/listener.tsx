@@ -4,19 +4,19 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function PostsAndCommentsAndLikesListener() {
+export default function UsersAndFollowsListener() {
   const router = useRouter();
   useEffect(() => {
     const supabase = createClient();
 
     const channel = supabase
-      .channel("posts_and_comments")
+      .channel("users_and_follows")
       .on(
         "postgres_changes",
         {
           schema: "public",
           event: "*",
-          table: "posts",
+          table: "users",
         },
         () => {
           router.refresh();
@@ -27,18 +27,7 @@ export default function PostsAndCommentsAndLikesListener() {
         {
           schema: "public",
           event: "*",
-          table: "comments",
-        },
-        () => {
-          router.refresh();
-        },
-      )
-      .on(
-        "postgres_changes",
-        {
-          schema: "public",
-          event: "*",
-          table: "likes",
+          table: "follows",
         },
         () => {
           router.refresh();

@@ -43,3 +43,31 @@ export const deleteComment = async ({ comment_id }: { comment_id: string }) => {
   const supabase = await createClient();
   return await supabase.from("comments").delete().eq("id", comment_id);
 };
+
+export const likePost = async (data: { post_id: string; user_id: string }) => {
+  const redis = await createRedisClient().connect();
+  await redis.del("likes:all");
+  await redis.del("posts:all");
+
+  const supabase = await createClient();
+  return await supabase.from("likes").insert(data);
+};
+
+export const unlikePost = async ({
+  post_id,
+  user_id,
+}: {
+  post_id: string;
+  user_id: string;
+}) => {
+  const redis = await createRedisClient().connect();
+  await redis.del("likes:all");
+  await redis.del("posts:all");
+
+  const supabase = await createClient();
+  return await supabase
+    .from("likes")
+    .delete()
+    .eq("post_id", post_id)
+    .eq("user_id", user_id);
+};
