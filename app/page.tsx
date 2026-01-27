@@ -10,7 +10,7 @@ export default async function Home() {
   const cookieStore = await cookies();
 
   return (
-    <main className="w-full pt-2 h-screen grid gap-4 grid-cols-1 sm:grid-cols-2 items-right">
+    <main className="w-full pt-2 pb-2 h-screen grid gap-4 grid-cols-1 sm:grid-cols-2 items-right">
       <Posts cookies={cookieStore} />
       <Users cookies={cookieStore} />
       <Notifications cookies={cookieStore} />

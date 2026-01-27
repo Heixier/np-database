@@ -3,7 +3,7 @@ create extension if not exists "uuid-ossp";
 create type notification_type as enum (
 	'like',
 	'follow',
-	'heartbreak'
+	'post'
 );
 
 create table users (
@@ -83,6 +83,7 @@ create table notifications (
 	id uuid primary key default uuid_generate_v4(),
 	user_id uuid references users (id) on delete cascade not null,
 	sender_id uuid references users (id) on delete cascade,
+	post_id uuid references posts (id) on delete cascade,
 	"type" notification_type not null, -- custom user type ;-;
 	content text not null,
 	"read" boolean default false,
@@ -195,21 +196,18 @@ declare
 	notification_content text;
 	notif_type notification_type;
 begin
-	select user_id into author_id from posts where id = NEW.post_id;
-	select username into reviewer_name from users where id = NEW.user_id;
+	select user_id into author_id from posts where id = new.post_id;
+	select username into reviewer_name from users where id = new.user_id;
 	-- now to notify the sender
-	if author_id = NEW.user_id then
-		notification_content := 'You liked your own post';
-		notif_type := 'heartbreak'; -- because that's sad
-	else
+	if author_id != new.user_id then
 		notification_content := reviewer_name || ' liked one of your posts';
 		notif_type := 'like';
 	end if;
 		
 	insert into notifications (user_id, sender_id, "type", content)
-	values (author_id, NEW.user_id, notif_type, notification_content);
+	values (author_id, new.user_id, notif_type, notification_content);
 
-	return NEW;
+	return new;
 end;
 $$;
 
@@ -218,17 +216,42 @@ create or replace trigger trigger_like_notification
 	for each row
 	execute function create_like_notification();
 
+
+-- On deleting a row from likes
+create or replace function delete_like_notification()
+returns trigger language plpgsql as $$
+declare
+	post_author_id uuid;
+begin
+	select user_id into post_author_id from posts where posts.id = old.post_id;
+
+	delete from notifications
+	where user_id = post_author_id
+	and sender_id = old.user_id
+	and post_id = old.post_id
+	and "type" = 'like';
+
+	return old;
+end;
+$$;
+
+create or replace trigger trigger_delete_like_notification
+	after delete on likes
+	for each row
+	execute function delete_like_notification();
+
+
 create or replace function create_follow_notification()
 returns trigger language plpgsql as $$
 declare
 	follower_name text;
 begin
-	select username into follower_name from users where id = NEW.follower_id;
+	select username into follower_name from users where id = new.follower_id;
 
 	insert into notifications (user_id, sender_id, "type", content)
-	values (NEW.following_id, NEW.follower_id, 'follow', follower_name || ' is now following you');
+	values (new.following_id, new.follower_id, 'follow', follower_name || ' is now following you');
 
-	return NEW;
+	return new;
 end;
 $$;
 
@@ -237,15 +260,64 @@ create or replace trigger trigger_follow_notification
 	for each row
 	execute function create_follow_notification();
 
+create or replace function delete_follow_notification()
+returns trigger language plpgsql as $$
+begin
+	delete from notifications
+	where user_id = following_id
+	and sender_id = follower_id
+	and "type" = 'follow';
+
+	return old;
+end;
+$$;
+
+create or replace trigger trigger_delete_follow_notification
+	after delete on follows
+	for each row
+	execute function delete_follow_notification();
+
+
+create or replace function create_post_notification()
+returns trigger language plpgsql as $$
+declare
+	post_author_name text;
+begin
+	select username into post_author_name from users where id = new.user_id;
+
+	insert into notifications (
+		user_id, 
+		sender_id, 
+		"type", 
+		content)
+	select
+	follower_id,
+	following_id,
+	'post',
+	'New post from ' || post_author_name
+	from follows
+	where new.user_id = following_id;
+
+	return new;
+end;
+$$;
+
+create or replace trigger trigger_create_post_notification
+	after insert on posts
+	for each row
+	execute function create_post_notification();
+
+-- On delete cascade will handle the deleting post notification thank god
+
 create or replace function decrement_like_count()
 returns trigger language plpgsql as $$
 begin
 	update posts
 	set like_count = like_count - 1
-	where posts.id = OLD.post_id
+	where posts.id = old.post_id
 	and like_count > 0;
 
-	return OLD; -- useless but need to return something
+	return old; 
 end
 $$;
 
@@ -259,9 +331,9 @@ returns trigger language plpgsql as $$
 begin
 	update posts
 	set like_count = like_count + 1
-	where posts.id = NEW.post_id;
+	where posts.id = new.post_id;
 
-	return NEW;
+	return new;
 end
 $$;
 
@@ -275,10 +347,10 @@ returns trigger language plpgsql as $$
 begin
 	update users
 	set follower_count = follower_count - 1
-	where users.id = OLD.following_id
+	where users.id = old.following_id
 	and follower_count > 0;
 
-	return OLD; -- useless but need to return something
+	return old;
 end
 $$;
 
@@ -292,9 +364,9 @@ returns trigger language plpgsql as $$
 begin
 	update users
 	set follower_count = follower_count + 1
-	where users.id = NEW.following_id;
+	where users.id = new.following_id;
 
-	return NEW;
+	return new;
 end
 $$;
 
