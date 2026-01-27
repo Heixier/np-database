@@ -25,7 +25,7 @@ export default function CreatePostButton({ userId }: { userId: string }) {
   const [titleContents, setTItleContents] = useState("");
 
   const handlePostCreation = async () => {
-    await createPost({
+    const { error } = await createPost({
       user_id: userId,
       title: titleContents,
       content: postContents,
@@ -34,6 +34,10 @@ export default function CreatePostButton({ userId }: { userId: string }) {
     setOpen(false);
     setPostContents("");
     setTItleContents("");
+
+    if (error) {
+      console.error(`Error creating post: ${error.message}`);
+    }
   };
 
   const handleSetOpen = async (open: boolean) => {

@@ -204,8 +204,8 @@ begin
 		notif_type := 'like';
 	end if;
 		
-	insert into notifications (user_id, sender_id, "type", content)
-	values (author_id, new.user_id, notif_type, notification_content);
+	insert into notifications (user_id, post_id, sender_id, "type", content)
+	values (author_id, new.post_id, new.user_id, notif_type, notification_content);
 
 	return new;
 end;
@@ -264,8 +264,8 @@ create or replace function delete_follow_notification()
 returns trigger language plpgsql as $$
 begin
 	delete from notifications
-	where user_id = following_id
-	and sender_id = follower_id
+	where user_id = old.following_id
+	and sender_id = old.follower_id
 	and "type" = 'follow';
 
 	return old;
@@ -287,12 +287,14 @@ begin
 
 	insert into notifications (
 		user_id, 
-		sender_id, 
+		sender_id,
+		post_id, 
 		"type", 
 		content)
 	select
 	follower_id,
 	following_id,
+	new.id,
 	'post',
 	'New post from ' || post_author_name
 	from follows

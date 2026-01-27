@@ -49,7 +49,7 @@ export const UserCard = async ({
         <span>{user.username}</span>
         <BioTooltip bio={user.bio} />
       </CardHeader>
-      <CardContent>
+      <CardContent className="hidden xl:block">
         <CardDescription className="flex flex-col">
           <span>Followers: {user.follower_count}</span>
           <span>Following: {user.following_count}</span>
