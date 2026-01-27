@@ -17,7 +17,8 @@ export const fetchAllPosts = async () => {
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, users!user_id(username), comments (*, users (username))");
+    .select("*, users!user_id(username), comments (*, users (username))")
+    .order("id", { ascending: false });
 
   if (!error) {
     await redis.set("posts:all", JSON.stringify(data), { EX: 60 });
@@ -39,7 +40,7 @@ export const isLiked = async ({
   if (cache) {
     const data: Like[] = JSON.parse(cache);
     const match = data.find(
-      (like) => (like.post_id === post_id, like.user_id === user_id),
+      (like) => like.post_id === post_id && like.user_id === user_id,
     );
 
     return { data: !!match, error: null };
@@ -54,7 +55,7 @@ export const isLiked = async ({
   }
 
   const match = data?.find(
-    (like) => (like.post_id === post_id, like.user_id === user_id),
+    (like) => like.post_id === post_id && like.user_id === user_id,
   );
 
   return { data: !!match, error };

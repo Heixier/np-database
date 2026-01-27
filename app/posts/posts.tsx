@@ -1,15 +1,19 @@
-import { cookies } from "next/headers";
 import CreatePostButton from "./create-post";
 import { fetchAllPosts } from "./fetch";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { PostCard } from "./post-card";
 import { fetchUser } from "../users/fetch";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
+import PostsAndCommentsAndLikesListener from "./listener";
 
-export default async function Posts() {
+export default async function Posts({
+  cookies,
+}: {
+  cookies: ReadonlyRequestCookies;
+}) {
   const { data: posts, error: postError } = await fetchAllPosts();
-  const cookieStore = await cookies();
-  const storedUserId = cookieStore.get("user_id")?.value ?? "";
+  const storedUserId = cookies.get("user_id")?.value ?? "";
 
   const { data: profile, error: userError } = await fetchUser({
     userId: storedUserId,
@@ -21,6 +25,7 @@ export default async function Posts() {
 
   return (
     <Card className="h-full overflow-y-auto">
+      <PostsAndCommentsAndLikesListener />
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-2xl">Posts</CardTitle>
         <CreatePostButton userId={profile.id} />

@@ -1,14 +1,17 @@
-import { cookies } from "next/headers";
 import { fetchAllUsers } from "./fetch";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { UserCard } from "./user-card";
 import UsersAndFollowsListener from "./listener";
 import { CreateUser } from "./create-user";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
-export default async function Users() {
+export default async function Users({
+  cookies,
+}: {
+  cookies: ReadonlyRequestCookies;
+}) {
   const { data, error } = await fetchAllUsers();
-  const cookieStore = await cookies();
-  const currentUserId = cookieStore.get("user_id");
+  const currentUserId = cookies.get("user_id");
 
   if (error) return <div>Database Error: {error.message}</div>;
   if (!data) return <div>No Users Found</div>;
