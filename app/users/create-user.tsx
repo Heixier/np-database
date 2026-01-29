@@ -38,8 +38,7 @@ export const CreateUser = () => {
   return (
     <Dialog open={open} onOpenChange={handleSetOpen}>
       <DialogTrigger asChild>
-        {/* WAY TOO MUCH EFFORT BRO */}
-        <Button className="text-black from-blue-400/60 via-blue-200 to-blue-400/60 bg-transparent bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500">
+        <Button className="text-black font-bold from-pumpkin_spice-600/60 via-pumpkin_spice-500/60 to-pumpkin_spice-600/60 bg-transparent bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500">
           Create User
         </Button>
       </DialogTrigger>

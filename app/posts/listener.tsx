@@ -33,17 +33,6 @@ export default function PostsAndCommentsAndLikesListener() {
           router.refresh();
         },
       )
-      .on(
-        "postgres_changes",
-        {
-          schema: "public",
-          event: "*",
-          table: "likes",
-        },
-        () => {
-          router.refresh();
-        },
-      )
       .subscribe();
     return () => {
       supabase.removeChannel(channel);

@@ -1,20 +1,20 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { createComment, deleteComment, deletePost } from "./actions";
-import { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { PostWithUserAndComments } from "@/types/extend";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
+import { useState } from "react";
+import { createComment, deleteComment } from "./actions";
 
 export const DeleteCommentButton = ({ comment_id }: { comment_id: string }) => {
   const deleteCommentHandler = async () => {
@@ -32,7 +32,7 @@ export const DeleteCommentButton = ({ comment_id }: { comment_id: string }) => {
   );
 };
 
-export const CreateCommentCard = ({
+export const CommentCard = ({
   currentUserId,
   post,
 }: {
@@ -103,7 +103,7 @@ export const CreateCommentCard = ({
     <div className="flex flex-col gap-4 w-full min-w-0">
       {comments.map((comment) => (
         <div key={comment.id}>
-          <Card className="bg-blue-600/5">
+          <Card className="bg-saffron-800/25 border-saffron/80">
             <CardContent>
               <div className="flex flex-row items-center gap-2 min-w-0">
                 <Avatar className="shrink-0">

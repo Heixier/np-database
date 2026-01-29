@@ -40,7 +40,7 @@ export const FollowButton = ({
         <Button
           variant="destructive"
           onClick={unfollowHandler}
-          className="w-full"
+          className="w-full border-none"
         >
           Unfollow
         </Button>
@@ -48,7 +48,7 @@ export const FollowButton = ({
         <Button
           variant="outline"
           onClick={followHandler}
-          className="bg-green-400/80 w-full"
+          className="w-full  border-none from-green-400/80 via-green-300/80 to-green-400/80 bg-gradient-to-r l hover:bg-transparent [background-size:300%_auto] hover:bg-[99%_center] transition-all duration-500"
         >
           Follow
         </Button>

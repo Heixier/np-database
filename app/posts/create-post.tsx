@@ -8,9 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { createPost } from "./actions";
-import { useState } from "react";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Field,
   FieldLabel,
@@ -18,6 +15,9 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+import { createPost } from "./actions";
 
 export default function CreatePostButton({ userId }: { userId: string }) {
   const [open, setOpen] = useState(false);
@@ -51,7 +51,7 @@ export default function CreatePostButton({ userId }: { userId: string }) {
       <DialogTrigger asChild>
         <Button
           disabled={!userId}
-          className="text-black/80 from-orange-400/60 via-orange-200 to-orange-400/60 bg-transparent bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500"
+          className="text-black/80 font-bold from-saffron-500/60 via-saffron-700 to-saffron-500/60 bg-transparent bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500"
         >
           Create Post
         </Button>

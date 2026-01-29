@@ -1,15 +1,15 @@
-import { UserView } from "@/types/tables";
-import SwitchUserButton from "./switch-user";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserView } from "@/types/tables";
+import { BioTooltip } from "./bio-tooltip";
 import { isFollowing } from "./fetch";
 import { FollowButton } from "./follow";
-import { BioTooltip } from "./bio-tooltip";
+import SwitchUserButton from "./switch-user";
 
 export const UserCard = async ({
   currentUserId,
@@ -25,7 +25,7 @@ export const UserCard = async ({
 
   return (
     <Card
-      className={`flex-row items-center w-full ${currentUserId === user.id ? "bg-green-400/10" : "bg-white-100"} hover:bg`}
+      className={`flex-row items-center w-full border-none ${currentUserId === user.id ? "bg-electric_indigo-800/40" : "bg-white-100"} hover:bg`}
     >
       <CardHeader className="flex flex-1 flex-row px-4 gap-4 min-w-0 items-center justify-start">
         {currentUserId !== user.id && (

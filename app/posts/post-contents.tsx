@@ -1,11 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PostWithUserAndComments } from "@/types/extend";
-import { CreateCommentCard } from "./comment";
-import { DeletePostButton } from "./delete-post";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { isLiked } from "./fetch";
+import { PostWithUserAndComments } from "@/types/extend";
+import { CommentCard } from "./comment";
 import { LikeButton } from "./create-like";
+import { DeletePostButton } from "./delete-post";
+import { isLiked } from "./fetch";
 
 export const PostContents = async ({
   post,
@@ -20,7 +20,7 @@ export const PostContents = async ({
   });
 
   return (
-    <Card className="min-w-0">
+    <Card className="border-saffron/80 bg-saffron/15 min-w-0">
       <CardHeader className="flex flex-row justify-around items-center text-2xl px-0 gap-2">
         <Avatar>
           <AvatarFallback className="text-xs">
@@ -36,16 +36,13 @@ export const PostContents = async ({
         )}
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 min-w-0">
-        <Separator />
+        <Separator className="bg-saffron" />
         <div className="flex flex-col gap-2">
-          <span className="text-xs text-underlin">@{post.users?.username}</span>
+          <span className="text-xs">@{post.users?.username}</span>
           <span>{post.content}</span>
         </div>
-        <Separator />
-        <CreateCommentCard
-          currentUserId={currentUserId}
-          post={post}
-        ></CreateCommentCard>
+        <Separator className="bg-saffron" />
+        <CommentCard currentUserId={currentUserId} post={post}></CommentCard>
       </CardContent>
     </Card>
   );
