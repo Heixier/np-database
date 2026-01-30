@@ -74,16 +74,19 @@ export const CommentCard = ({
       <Popover open={popOverOpen} onOpenChange={setPopOverOpenHandler}>
         <PopoverTrigger asChild>
           <Button variant="ghost" className="hover:bg-opacity-0">
-            <Alert className="flex flex-1 gap-8 items-center justify-left">
+            <Alert className="flex flex-1 gap-8 items-center justify-left bg-white/60 hover:bg-white/80">
               <AlertTitle>No comments yet!</AlertTitle>
               <AlertDescription>Be the first to comment!</AlertDescription>
             </Alert>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="flex flex-col gap-4 px-4">
-          <Label htmlFor="comment">Comment</Label>
+        <PopoverContent className="min-w-0 flex flex-col gap-4 px-4 bg-electric_indigo-800">
+          <Label htmlFor="comment" className="font-bold text-md">
+            Comment
+          </Label>
           <Textarea
             id="comment"
+            className="border-none"
             placeholder="praise this post here"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -115,7 +118,7 @@ export const CommentCard = ({
                 <CardTitle className="whitespace-nowrap shrink-0">
                   {comment.users?.username ?? "Anon"}
                 </CardTitle>
-                <p className="flex-1 truncate min-w-0">{comment.content}</p>
+                <p className="flex-1 break-words min-w-0">{comment.content}</p>
               </div>
               <CardFooter className="flex-col xl:flex-row px-0 gap-4 text-sm justify-between">
                 <div className="shrink-0 whitespace-nowrap">
@@ -131,9 +134,11 @@ export const CommentCard = ({
       ))}
       <Popover open={popOverOpen} onOpenChange={setPopOverOpenHandler}>
         <PopoverTrigger asChild>
-          <Button variant="outline">Create another comment</Button>
+          <Button variant="outline" className="bg-white/60 hover:bg-white/80">
+            Create another comment
+          </Button>
         </PopoverTrigger>
-        <PopoverContent className="flex flex-col gap-4 px-4">
+        <PopoverContent className="min-w-0 flex flex-col gap-4 px-4 bg-electric_indigo-800">
           <Label htmlFor="comment">Comment</Label>
           <Textarea
             id="comment"

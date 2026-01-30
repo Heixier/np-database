@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${font.className} antialiased`}>
-        <div className="w-full">{children}</div>
+        <div className="w-full h-screen">{children}</div>
       </body>
     </html>
   );

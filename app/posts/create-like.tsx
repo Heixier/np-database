@@ -1,7 +1,8 @@
 "use client";
 
-import { likePost, unlikePost } from "./actions";
 import { Heart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { likePost, unlikePost } from "./actions";
 
 export const LikeButton = ({
   postId,
@@ -12,6 +13,8 @@ export const LikeButton = ({
   userId: string;
   isLiked: boolean;
 }) => {
+  const router = useRouter();
+
   const handleLikePost = async () => {
     const { error } = await likePost({
       post_id: postId,
@@ -21,6 +24,7 @@ export const LikeButton = ({
     if (error) {
       console.error(`Error liking post: ${error.message}`);
     }
+    router.refresh();
   };
 
   const handleunLikePost = async () => {
@@ -32,17 +36,18 @@ export const LikeButton = ({
     if (error) {
       console.error(`Error liking post: ${error.message}`);
     }
+    router.refresh();
   };
   return isLiked ? (
     <Heart
       onClick={handleunLikePost}
-      className="text-pink-400 cursor-pointer transition-colors"
+      className="size-7 text-pink-400 cursor-pointer transition-colors"
       fill="currentColor"
     />
   ) : (
     <Heart
       onClick={handleLikePost}
-      className="text-gray-300 hover:text-pink-400 cursor-pointer transition-colors"
+      className="size-7 text-white hover:text-pink-400 cursor-pointer transition-colors"
       stroke="currentColor"
     />
   );

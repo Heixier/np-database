@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Card,
   CardContent,
@@ -25,7 +24,7 @@ export const UserCard = async ({
 
   return (
     <Card
-      className={`flex-row items-center w-full border-none ${currentUserId === user.id ? "bg-electric_indigo-800/40" : "bg-white-100"} hover:bg`}
+      className={`flex-row items-center w-full border-black/10 ${currentUserId === user.id ? "bg-saffron-600/50" : "bg-white-100"} hover:bg`}
     >
       <CardHeader className="flex flex-1 flex-row px-4 gap-4 min-w-0 items-center justify-start">
         {currentUserId !== user.id && (
@@ -41,16 +40,11 @@ export const UserCard = async ({
             following={following}
           ></FollowButton>
         )}
-        <Avatar>
-          <AvatarFallback className="text-xs">
-            {user.username?.substring(0, 2).toUpperCase() ?? "?"}
-          </AvatarFallback>
-        </Avatar>
-        <span>{user.username}</span>
+        <p className="font-bold text-black/60">@{user.username}</p>
         <BioTooltip bio={user.bio} />
       </CardHeader>
       <CardContent className="hidden xl:block">
-        <CardDescription className="flex flex-col">
+        <CardDescription className="flex flex-col text-black">
           <span>Followers: {user.follower_count}</span>
           <span>Following: {user.following_count}</span>
         </CardDescription>

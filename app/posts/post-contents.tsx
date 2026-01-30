@@ -20,14 +20,17 @@ export const PostContents = async ({
   });
 
   return (
-    <Card className="border-saffron/80 bg-saffron/15 min-w-0">
-      <CardHeader className="flex flex-row justify-around items-center text-2xl px-0 gap-2">
+    <Card className="min-w-0 border-saffron/80 bg-saffron/15 w-full max-w-full flex flex-col">
+      <CardHeader className="min-w-0 h-12 flex-shrink-0 flex flex-row justify-between items-center text-2xl px-8 gap-8">
         <Avatar>
-          <AvatarFallback className="text-xs">
+          <AvatarFallback className="text-xs bg-saffron-800/80">
             {post.users?.username?.substring(0, 2).toUpperCase() ?? "?"}
           </AvatarFallback>
         </Avatar>
-        <CardTitle>{post.title}</CardTitle>
+        <p className="font-bold truncate text-sm">@{post.users?.username}</p>
+        <CardTitle className="truncate flex-1 min-w-0 text-center text-4xl text-left px-2">
+          {post.title}
+        </CardTitle>
         {currentUserId !== post.user_id && (
           <LikeButton postId={post.id} userId={currentUserId} isLiked={liked} />
         )}
@@ -37,9 +40,8 @@ export const PostContents = async ({
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 min-w-0">
         <Separator className="bg-saffron" />
-        <div className="flex flex-col gap-2">
-          <span className="text-xs">@{post.users?.username}</span>
-          <span>{post.content}</span>
+        <div className="min-w-0 w-full">
+          <p className="break-words w-full min-w-0">{post.content}</p>
         </div>
         <Separator className="bg-saffron" />
         <CommentCard currentUserId={currentUserId} post={post}></CommentCard>

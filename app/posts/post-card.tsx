@@ -10,11 +10,9 @@ export function PostCard({
   posts: PostWithUserAndComments[];
 }) {
   return (
-    <div className="w-full min-w-0">
+    <div className="flex flex-col min-w-0 w-full">
       {posts.map((post) => (
-        <div key={post.id}>
-          <PostContents post={post} currentUserId={currentUserId} />
-        </div>
+        <PostContents key={post.id} post={post} currentUserId={currentUserId} />
       ))}
     </div>
   );
