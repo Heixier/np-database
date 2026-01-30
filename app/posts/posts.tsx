@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import CreatePostButton from "./create-post";
 import { fetchAllPosts } from "./fetch";
@@ -18,9 +19,11 @@ export default async function Posts({ userId }: { userId: string }) {
         <CreatePostButton userId={userId} />
       </CardHeader>
       <Separator className="bg-saffron flex-shrink-0" />
-      <div className="flex flex-col px-4 gap-8 w-full min-w-0">
-        <PostCard currentUserId={userId} posts={posts ?? []} />
-      </div>
+      <ScrollArea className="min-h-0">
+        <div className="flex">
+          <PostCard currentUserId={userId} posts={posts ?? []} />
+        </div>
+      </ScrollArea>
     </Card>
   );
 }

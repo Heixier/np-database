@@ -20,7 +20,7 @@ export const PostContents = async ({
   });
 
   return (
-    <Card className="min-w-0 border-saffron/80 bg-saffron/15 w-full max-w-full flex flex-col">
+    <Card className="min-w-0 border-saffron/80 bg-saffron/15 w-full flex flex-col">
       <CardHeader className="min-w-0 h-12 flex-shrink-0 flex flex-row justify-between items-center text-2xl px-8 gap-8">
         <Avatar>
           <AvatarFallback className="text-xs bg-saffron-800/80">
