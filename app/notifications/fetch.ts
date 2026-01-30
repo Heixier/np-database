@@ -10,5 +10,8 @@ export const fetchUserNotificationsWithSender = async ({
     return { data: null, error: { message: "No user ID provided" } };
   const supabase = await createClient();
 
-  return await supabase.from("notifications").select().eq("user_id", user_id);
+  return await supabase
+    .from("notifications_with_sender_name")
+    .select()
+    .eq("user_id", user_id);
 };

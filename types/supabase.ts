@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.1"
+  }
   graphql_public: {
     Tables: {
       [_ in never]: never
@@ -39,19 +44,19 @@ export type Database = {
           content: string
           created_at: string
           id: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -226,6 +231,7 @@ export type Database = {
           content: string
           created_at: string | null
           id: string
+          post_id: string | null
           read: boolean | null
           sender_id: string | null
           type: Database["public"]["Enums"]["notification_type"]
@@ -235,6 +241,7 @@ export type Database = {
           content: string
           created_at?: string | null
           id?: string
+          post_id?: string | null
           read?: boolean | null
           sender_id?: string | null
           type: Database["public"]["Enums"]["notification_type"]
@@ -244,12 +251,27 @@ export type Database = {
           content?: string
           created_at?: string | null
           id?: string
+          post_id?: string | null
           read?: boolean | null
           sender_id?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "post_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_sender_id_fkey"
             columns: ["sender_id"]
@@ -350,6 +372,7 @@ export type Database = {
           content: string | null
           created_at: string | null
           id: string | null
+          post_id: string | null
           read: boolean | null
           sender_id: string | null
           sender_name: string | null
@@ -357,6 +380,20 @@ export type Database = {
           user_id: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "post_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_sender_id_fkey"
             columns: ["sender_id"]
@@ -431,7 +468,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      notification_type: "like" | "follow" | "heartbreak"
+      notification_type: "like" | "follow" | "post"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -562,8 +599,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      notification_type: ["like", "follow", "heartbreak"],
+      notification_type: ["like", "follow", "post"],
     },
   },
 } as const
-

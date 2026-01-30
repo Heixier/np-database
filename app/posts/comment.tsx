@@ -3,7 +3,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -107,27 +107,30 @@ export const CommentCard = ({
       {comments.map((comment) => (
         <div key={comment.id}>
           <Card className="bg-saffron-800/25 border-saffron/80">
-            <CardContent>
-              <div className="flex flex-row items-center gap-2 min-w-0">
-                <Avatar className="shrink-0">
-                  <AvatarFallback className="text-xs">
-                    {comment.users?.username?.substring(0, 2).toUpperCase() ??
-                      "?"}
-                  </AvatarFallback>
-                </Avatar>
-                <CardTitle className="whitespace-nowrap shrink-0">
-                  {comment.users?.username ?? "Anon"}
-                </CardTitle>
-                <p className="flex-1 break-words min-w-0">{comment.content}</p>
-              </div>
-              <CardFooter className="flex-col xl:flex-row px-0 gap-4 text-sm justify-between">
+            <CardContent className="flex flex-row items-center gap-4 justify-between">
+              <div>
+                <div className="flex flex-row items-center gap-2 min-w-0">
+                  <Avatar className="shrink-0">
+                    <AvatarFallback className="text-xs">
+                      {comment.users?.username?.substring(0, 2).toUpperCase() ??
+                        "?"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <CardTitle className="whitespace-nowrap shrink-0">
+                    {comment.users?.username ?? "Anon"}
+                  </CardTitle>
+                  <p className="flex-1 break-words min-w-0">
+                    {comment.content}
+                  </p>
+                </div>
                 <div className="shrink-0 whitespace-nowrap">
                   {format(comment.created_at, "Pp")}
                 </div>
-                {currentUserId === comment.user_id && (
-                  <DeleteCommentButton comment_id={comment.id} />
-                )}
-              </CardFooter>
+              </div>
+
+              {currentUserId === comment.user_id && (
+                <DeleteCommentButton comment_id={comment.id} />
+              )}
             </CardContent>
           </Card>
         </div>

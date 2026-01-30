@@ -24,7 +24,7 @@ export const UserCard = async ({
 
   return (
     <Card
-      className={`flex-row items-center w-full border-black/10 ${currentUserId === user.id ? "bg-saffron-600/50" : "bg-white-100"} hover:bg`}
+      className={`w-0 grow flex-row items-center border-black/10 ${currentUserId === user.id ? "bg-saffron-600/50" : "bg-white-100"} hover:bg`}
     >
       <CardHeader className="flex flex-1 flex-row px-4 gap-4 min-w-0 items-center justify-start">
         {currentUserId !== user.id && (

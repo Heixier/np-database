@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { CreateUser } from "./create-user";
 import { fetchAllUsers } from "./fetch";
 import UsersAndFollowsListener from "./listener";
@@ -21,15 +22,17 @@ export default async function Users({
         <CardTitle className="text-2xl">Users</CardTitle>
         <CreateUser />
       </CardHeader>
-      <Card className="bg-pumpkin_spice-800/20 border-black/20 px-4 overflow-y-auto">
-        {data.map((user) => (
-          <div key={user.id}>
-            <div className="flex flex-row gap-4">
-              <UserCard currentUserId={userId ?? ""} user={user}></UserCard>
+      <ScrollArea className="h-full min-h-0">
+        <Card className="flex min-w bg-pumpkin_spice-800/20 border-black/20 px-4 overflow-y-auto">
+          {data.map((user) => (
+            <div key={user.id}>
+              <div className="flex flex-row gap-4">
+                <UserCard currentUserId={userId ?? ""} user={user}></UserCard>
+              </div>
             </div>
-          </div>
-        ))}
-      </Card>
+          ))}
+        </Card>
+      </ScrollArea>
     </Card>
   );
 }
