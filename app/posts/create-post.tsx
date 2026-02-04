@@ -11,7 +11,7 @@ import {
 import { Field, FieldLabel, FieldSet, FieldTitle } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
+import { Loader2, StickyNote } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import { createPost } from "./actions";
@@ -83,7 +83,10 @@ export default function CreatePostButton({ userId }: { userId: string }) {
       <DialogContent className="text-white flex w-full border-none from-black via-neutral-900 to-neutral-700 bg-gradient-to-tr">
         <DialogTitle className="sr-only"></DialogTitle>
         <FieldSet className="w-full">
-          <FieldTitle className="font-bold text-2xl">Create Post</FieldTitle>
+          <FieldTitle className="font-bold text-2xl">
+            <p>Create Post</p>
+            <StickyNote />
+          </FieldTitle>
           <Field>
             <FieldLabel htmlFor="post_title">Title</FieldLabel>
             <Input
@@ -94,7 +97,7 @@ export default function CreatePostButton({ userId }: { userId: string }) {
               onChange={(e) => {
                 setTitleContents(e.target.value);
               }}
-              className="border-white focus:border-white focus-visible:ring-white selection:bg-white selection:text-black"
+              className="border-saffron-400 focus:border-saffron-400 focus-visible:ring-saffron-400 selection:bg-white selection:text-black"
               onKeyDown={handleInputKeyPress}
             />
           </Field>
@@ -107,7 +110,7 @@ export default function CreatePostButton({ userId }: { userId: string }) {
               onChange={(e) => {
                 setPostContents(e.target.value);
               }}
-              className="border-white focus:border-white focus-visible:ring-white selection:bg-white selection:text-black"
+              className="border-saffron-400 focus:border-saffron-400 focus-visible:ring-saffron-400 selection:bg-white selection:text-black"
               onKeyDown={handleTextareaKeyPress}
             ></Textarea>
             {loading ? (

@@ -58,7 +58,7 @@ export default function UserSelect({
                   {user.username?.substring(0, 2).toUpperCase() ?? "?"}
                 </AvatarFallback>
               </Avatar>
-              <p className="font-bold">@{user.username}</p>
+              <p className="font-bold text-center">@{user.username}</p>
               <BioTooltip bio={user.bio} />
               <div className="flex gap-4 items-center w-fit justify-center">
                 {currentUserId !== user.id && (

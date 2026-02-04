@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CircleUser } from "lucide-react";
+import { UserRound } from "lucide-react";
 import { CreateUser } from "./create-user";
 import { fetchAllUsers } from "./fetch";
 import { UserCard } from "./user-card";
@@ -21,7 +21,7 @@ export default async function Users({
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex flex-row gap-2 items-center text-2xl">
           <p>Users</p>
-          <CircleUser
+          <UserRound
             className="fill-white stroke-pumpkin_spice-400"
             size={32}
             strokeWidth={2}

@@ -9,7 +9,11 @@ export const setUserIdCookie = async (user_id: string) => {
   cookieStore.set("user_id", user_id);
 };
 
-export const createUser = async (data: { username: string; bio: string }) => {
+export const createUser = async (data: {
+  username: string;
+  bio: string;
+  media_url: string | null;
+}) => {
   const redis = await createRedisClient().connect();
   await redis.del("user_view:all");
 
