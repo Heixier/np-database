@@ -87,6 +87,7 @@ export const CommentCard = ({
   };
 
   const createCommentHandler = async () => {
+    if (!comment) return;
     setLoading(true);
 
     try {
