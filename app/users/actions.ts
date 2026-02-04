@@ -17,6 +17,14 @@ export const createUser = async (data: { username: string; bio: string }) => {
   return await supabase.from("users").insert(data);
 };
 
+export const deleteUser = async ({ userId }: { userId: string }) => {
+  const redis = await createRedisClient().connect();
+  await redis.del("user_view:all");
+
+  const supabase = await createClient();
+  return await supabase.from("users").delete().eq("id", userId);
+};
+
 export const followUser = async (data: {
   follower_id: string;
   following_id: string;
