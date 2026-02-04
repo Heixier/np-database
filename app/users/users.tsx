@@ -18,7 +18,7 @@ export default async function Users({
   return (
     <Card className="border-none backdrop-blur-md bg-pumpkin_spice/50 px-4">
       {/* <UsersAndFollowsListener /> */}
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between px-2">
         <CardTitle className="flex flex-row gap-2 items-center text-2xl">
           <p>Users</p>
           <UserRound

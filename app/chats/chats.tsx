@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageSquareMore } from "lucide-react";
+import ClearChatButton from "./chat-clear";
 import { ChatInput } from "./chat-input";
 import { ChatMessage } from "./chat-message";
 import { fetchAllChatMessages } from "./fetch";
@@ -13,7 +14,7 @@ export default async function Chats({ userId }: { userId: string }) {
 
   return (
     <Card className="flex flex-col h-full w-full overflow-y-hidden bg-electric_indigo/50 min-w-0 border-none">
-      <CardHeader className="flex col items-center justify-between w-full min-w-0">
+      <CardHeader className="flex flex-row items-center justify-between w-full min-w-0">
         <CardTitle className="flex flex-row gap-2 items-center text-2xl">
           <p>Chats</p>
           <MessageSquareMore
@@ -22,6 +23,7 @@ export default async function Chats({ userId }: { userId: string }) {
             strokeWidth={2}
           />
         </CardTitle>
+        <ClearChatButton />
       </CardHeader>
       <Card className="flex h-full min-h-0 bg-black/80 mx-4 min-w-0 border-none">
         <CardContent className="flex flex-col min-h-0">

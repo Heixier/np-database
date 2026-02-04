@@ -26,5 +26,5 @@ export const deleteChatMessage = async ({ chatId }: { chatId: string }) => {
 export const deleteAllChats = async () => {
   const supabase = await createClient();
 
-  return await supabase.from("chats").delete();
+  return await supabase.from("chats").delete().neq("content", "");
 };

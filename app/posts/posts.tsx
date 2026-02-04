@@ -13,7 +13,7 @@ export default async function Posts({ userId }: { userId: string }) {
   return (
     <Card className="flex flex-col border-none backdrop-blur-md bg-saffron/50 h-full px-4">
       {/* <PostsAndCommentsAndLikesListener /> */}
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between px-2">
         <CardTitle className="flex flex-row gap-2 items-center text-2xl">
           <p>Posts</p>
           <StickyNote

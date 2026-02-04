@@ -138,13 +138,13 @@ export const CommentCard = ({
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="flex-1 text-white hover:text-white bg-transparent from-neutral-800 via-neutral-600 to-neutral-800 bg-gradient-to-r border-none self-center hover:bg-[99%_center] [background-size:300%_auto] transition-all duration-500"
+                className="flex-1 text-white hover:text-white bg-transparent from-neutral-900 via-neutral-700 to-neutral-800 bg-gradient-to-r border-none self-center hover:bg-[99%_center] [background-size:300%_auto] transition-all duration-500"
               >
                 <p>Create a comment!</p>
                 <PlusCircleIcon />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="border-none min-w-0 flex flex-col gap-4 px-4 from-neutral-800 to-neutral-600 bg-gradient-to-tr items-center">
+            <PopoverContent className="border-none min-w-0 flex flex-col gap-4 px-4 from-neutral-900 to-neutral-700 bg-gradient-to-tr items-center">
               <Label htmlFor="comment" className="font-bold text-white text-lg">
                 New Comment
               </Label>

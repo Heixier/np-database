@@ -20,7 +20,7 @@ export const PostContents = async ({
   });
 
   return (
-    <Card className="min-w-0 border-none bg-saffron w-full flex flex-col text-sm">
+    <Card className="min-w-0 border-none from-saffron-500 to-saffron-700 bg-gradient-to-tr w-full flex flex-col text-sm">
       <CardHeader className="min-w-0 h-fit flex flex-row items-center px-8 justify-between">
         <div className="flex flex-col items-center">
           <Avatar>
@@ -49,7 +49,6 @@ export const PostContents = async ({
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 min-w-0 items-center">
         <Separator className="bg-black/80" />
-
         <p className="rounded-md from-neutral-900/90 to-neutral-800/90 bg-gradient-to-tr py-2 px-4 break-words w-full text-left min-w-0 text-white">
           {post.content}
         </p>
