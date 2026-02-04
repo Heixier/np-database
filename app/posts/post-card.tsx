@@ -10,7 +10,7 @@ export function PostCard({
   posts: PostWithUserAndComments[];
 }) {
   return (
-    <div className="flex flex-col min-w-0 h-full w-0 grow gap-12">
+    <div className="flex flex-col min-w-0 h-full w-0 grow gap-12 p-6">
       {posts.map((post) => (
         <PostContents key={post.id} post={post} currentUserId={currentUserId} />
       ))}

@@ -2,7 +2,6 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CreateUser } from "./create-user";
 import { fetchAllUsers } from "./fetch";
-import UsersAndFollowsListener from "./listener";
 import { UserCard } from "./user-card";
 
 export default async function Users({
@@ -17,7 +16,7 @@ export default async function Users({
 
   return (
     <Card className="border-pumpkin_spice/80 backdrop-blur-md bg-pumpkin_spice/50 px-4">
-      <UsersAndFollowsListener />
+      {/* <UsersAndFollowsListener /> */}
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-2xl">Users</CardTitle>
         <CreateUser />

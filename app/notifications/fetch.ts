@@ -11,7 +11,7 @@ export const fetchUserNotificationsWithSender = async ({
   const supabase = await createClient();
 
   return await supabase
-    .from("notifications_with_sender_name")
+    .from("notifications_with_sender_details")
     .select()
     .eq("user_id", user_id);
 };
