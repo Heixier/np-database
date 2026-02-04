@@ -16,7 +16,11 @@ export default async function Home() {
     userId: storedUserId,
   });
 
-  if (userError) console.error(`Error loading user: ${userError.message}`);
+  if (userError) {
+    console.error(
+      `Error loading user: ${userError.message} (Ignore this message if user was deleted)`,
+    );
+  }
 
   return (
     <main
@@ -25,10 +29,10 @@ export default async function Home() {
         `bg-[url(/background.jpg)] bg-cover bg-center`,
       )}
     >
-      {profile?.id && <Posts userId={profile.id} />}
+      {profile && profile?.id && <Posts userId={profile.id} />}
       <Users userId={profile?.id} />
-      {profile?.id && <Notifications userId={profile.id} />}
-      {profile?.id && <Chats userId={profile.id} />}
+      {profile && profile?.id && <Notifications userId={profile.id} />}
+      {profile && profile?.id && <Chats userId={profile.id} />}
     </main>
   );
 }

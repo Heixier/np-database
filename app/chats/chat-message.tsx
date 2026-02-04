@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/context-menu";
 import { cn } from "@/lib/utils";
 import { ChatWithUser } from "@/types/extend";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteChatMessage } from "./actions";
@@ -39,7 +39,7 @@ export const ChatMessage = ({
   };
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
+      <ContextMenuTrigger asChild>
         <div
           key={chat.id}
           className={cn(
@@ -62,7 +62,12 @@ export const ChatMessage = ({
         {loading ? (
           <Loader2 className="animate-spin text-neutral-200 bg-transparent" />
         ) : (
-          <Button onClick={handleDeleteMessage} variant="destructive">
+          <Button
+            onClick={handleDeleteMessage}
+            variant="destructive"
+            disabled={currentUser !== chat.user_id}
+          >
+            <Trash2 className="w-fit" />
             Delete
           </Button>
         )}
