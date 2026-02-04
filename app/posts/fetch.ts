@@ -20,7 +20,8 @@ export const fetchAllPosts = async () => {
     .select(
       "*, users!user_id(username, media_url), comments (*, users (username, media_url))",
     )
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .order("created_at", { referencedTable: "comments", ascending: false });
 
   if (!error) {
     await redis.set("posts:all", JSON.stringify(data), { EX: 60 });

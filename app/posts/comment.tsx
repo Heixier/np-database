@@ -102,6 +102,7 @@ export const CommentCard = ({
     } finally {
       setLoading(false);
       setPopOverOpen(false);
+      setCommentsVisible(true);
       setComment("");
       router.refresh();
     }
@@ -113,113 +114,113 @@ export const CommentCard = ({
   };
 
   return (
-    <div className="flex flex-col w-full items-center gap-4">
-      {!comments || comments.length === 0 ? (
-        <p>No comments yet!</p>
-      ) : (
-        <>
-          <Button onClick={setCommentsVisibleToggle} className="w-fit">
-            {!commentsVisible ? (
-              <div className="flex gap-2 items-center">
-                <p>Show comments</p>
-                <ChevronDown />
-              </div>
-            ) : (
-              <div className="flex gap-2 items-center">
-                <p>Hide comments</p>
-                <ChevronUp />
-              </div>
-            )}
-          </Button>
-          {commentsVisible && (
-            <div className="flex flex-col gap-4 w-full min-w-0">
-              {comments.map((comment) => (
-                <div key={comment.id}>
-                  <Card className="bg-saffron-800/25 border-saffron/80">
-                    <CardContent className="flex flex-col gap-4">
-                      <div className="flex flex-row items-center gap-2 min-w-0 w-full justify-between">
-                        <div className="flex gap-2 flex-col items-center">
-                          <Avatar className="shrink-0">
-                            <AvatarImage
-                              src={comment.users?.media_url ?? ""}
-                            ></AvatarImage>
-                            <AvatarFallback className="text-xs">
-                              {comment.users?.username
-                                ?.substring(0, 2)
-                                .toUpperCase() ?? "?"}
-                            </AvatarFallback>
-                          </Avatar>
-                          <CardTitle className="whitespace-nowrap shrink-0">
-                            @{comment.users?.username ?? "Anon"}
-                          </CardTitle>
-                        </div>
-                        <div>
-                          {currentUserId === comment.user_id && (
-                            <DeleteCommentButton comment_id={comment.id} />
-                          )}
-                        </div>
-                      </div>
-                      <Separator className="bg-black/80" />
-                      <p className="flex-1 break-words min-w-0">
-                        {comment.content}
-                      </p>
-                      <div className="shrink-0 whitespace-nowrap text-xs">
-                        {format(comment.created_at, "Pp")}
-                      </div>
-                    </CardContent>
-                  </Card>
+    <div className="w-full">
+      <div className="flex flex-col w-full gap-4">
+        <div className="flex gap-2 justify-between items-center">
+          {comments && comments.length !== 0 && (
+            <Button onClick={setCommentsVisibleToggle} className="w-fit">
+              {!commentsVisible ? (
+                <div className="flex gap-2 items-center">
+                  <p>Show comments</p>
+                  <ChevronDown />
                 </div>
-              ))}
-              <Button
-                onClick={setCommentsVisibleToggle}
-                className="w-fit self-center"
-              >
+              ) : (
                 <div className="flex gap-2 items-center">
                   <p>Hide comments</p>
                   <ChevronUp />
                 </div>
-              </Button>
-            </div>
-          )}
-        </>
-      )}
-
-      <Popover open={popOverOpen} onOpenChange={setPopOverOpenHandler}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="text-white hover:text-white flex-1 bg-transparent from-neutral-800 via-neutral-600 to-neutral-800 bg-gradient-to-r w-fit border-none self-center hover:bg-[99%_center] [background-size:300%_auto] transition-all duration-500"
-          >
-            <p>Create a comment!</p>
-            <PlusCircleIcon />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="border-none min-w-0 flex flex-col gap-4 px-4 from-neutral-800 to-neutral-600 bg-gradient-to-tr items-center">
-          <Label htmlFor="comment" className="font-bold text-white text-lg">
-            New Comment
-          </Label>
-          <Textarea
-            id="comment"
-            placeholder="praise this post here"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            onKeyDown={keyDownHandler}
-            className="border-none rounded-md bg-black/80 text-white h-32"
-          />
-          {loading ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <Button
-              variant="outline"
-              onClick={createCommentHandler}
-              disabled={!comment}
-              className="border-none text-neutral-200 hover:text-neutral-200 font-bold from-neutral-600 via-neutral-400/50 to-neutral-600 bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500 border"
-            >
-              Submit [Enter]
+              )}
             </Button>
           )}
-        </PopoverContent>
-      </Popover>
+
+          <Popover open={popOverOpen} onOpenChange={setPopOverOpenHandler}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="flex-1 text-white hover:text-white bg-transparent from-neutral-800 via-neutral-600 to-neutral-800 bg-gradient-to-r border-none self-center hover:bg-[99%_center] [background-size:300%_auto] transition-all duration-500"
+              >
+                <p>Create a comment!</p>
+                <PlusCircleIcon />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="border-none min-w-0 flex flex-col gap-4 px-4 from-neutral-800 to-neutral-600 bg-gradient-to-tr items-center">
+              <Label htmlFor="comment" className="font-bold text-white text-lg">
+                New Comment
+              </Label>
+              <Textarea
+                id="comment"
+                placeholder="praise this post here"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                onKeyDown={keyDownHandler}
+                className="border-none rounded-md bg-black/80 text-white h-32"
+              />
+              {loading ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                <Button
+                  variant="outline"
+                  onClick={createCommentHandler}
+                  disabled={!comment}
+                  className="border-none text-neutral-200 hover:text-neutral-200 font-bold from-neutral-600 via-neutral-400/50 to-neutral-600 bg-gradient-to-r [background-size:300%_auto] hover:bg-transparent hover:bg-[99%_center] transition-all duration-500 border"
+                >
+                  Submit [Enter]
+                </Button>
+              )}
+            </PopoverContent>
+          </Popover>
+        </div>
+        {comments && comments.length !== 0 && commentsVisible && (
+          <div className="flex flex-col gap-4 w-full min-w-0">
+            {comments.map((comment) => (
+              <div key={comment.id}>
+                <Card className="bg-saffron-800/25 border-saffron/80">
+                  <CardContent className="flex flex-col gap-4">
+                    <div className="flex flex-row items-center gap-2 min-w-0 w-full justify-between">
+                      <div className="flex gap-2 flex-col items-center">
+                        <Avatar className="shrink-0">
+                          <AvatarImage
+                            src={comment.users?.media_url ?? ""}
+                          ></AvatarImage>
+                          <AvatarFallback className="text-xs">
+                            {comment.users?.username
+                              ?.substring(0, 2)
+                              .toUpperCase() ?? "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <CardTitle className="whitespace-nowrap shrink-0">
+                          @{comment.users?.username ?? "Anon"}
+                        </CardTitle>
+                      </div>
+                      <div>
+                        {currentUserId === comment.user_id && (
+                          <DeleteCommentButton comment_id={comment.id} />
+                        )}
+                      </div>
+                    </div>
+                    <Separator className="bg-black/80" />
+                    <p className="flex-1 break-words min-w-0">
+                      {comment.content}
+                    </p>
+                    <div className="shrink-0 whitespace-nowrap text-xs">
+                      {format(comment.created_at, "Pp")}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+            <Button
+              onClick={setCommentsVisibleToggle}
+              className="w-fit self-center"
+            >
+              <div className="flex gap-2 items-center">
+                <p>Hide comments</p>
+                <ChevronUp />
+              </div>
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

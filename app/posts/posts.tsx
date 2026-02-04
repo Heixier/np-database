@@ -25,7 +25,7 @@ export default async function Posts({ userId }: { userId: string }) {
         <CreatePostButton userId={userId} />
       </CardHeader>
       <Card className="flex h-full min-h-0 bg-black/80 p-0 border-none">
-        <CardContent className="flex flex-col min-h-0 px-0">
+        <CardContent className="flex flex-col min-h-0 px-0 h-full">
           <ScrollArea className="min-h-0">
             <div className="flex">
               <PostCard currentUserId={userId} posts={posts ?? []} />

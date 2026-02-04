@@ -1,7 +1,8 @@
 "use client";
 
-import { Heart } from "lucide-react";
+import { Heart, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { likePost, unlikePost } from "./actions";
 
 export const LikeButton = ({
@@ -15,39 +16,56 @@ export const LikeButton = ({
 }) => {
   const router = useRouter();
 
-  const handleLikePost = async () => {
-    const { error } = await likePost({
-      post_id: postId,
-      user_id: userId,
-    });
+  const [loading, setLoading] = useState(false);
+  const [liked, setLiked] = useState(isLiked);
 
-    if (error) {
-      console.error(`Error liking post: ${error.message}`);
+  const handleLikePost = async () => {
+    setLoading(true);
+    try {
+      const { error } = await likePost({
+        post_id: postId,
+        user_id: userId,
+      });
+      if (error) throw new Error(error.message);
+    } catch (e) {
+      console.error(`Error: ${(e as Error).message}`);
+    } finally {
+      setLoading(false);
+      setLiked(true);
+      router.refresh();
     }
-    router.refresh();
   };
 
   const handleunLikePost = async () => {
-    const { error } = await unlikePost({
-      post_id: postId,
-      user_id: userId,
-    });
+    setLoading(true);
+    try {
+      const { error } = await unlikePost({
+        post_id: postId,
+        user_id: userId,
+      });
 
-    if (error) {
-      console.error(`Error liking post: ${error.message}`);
+      if (error) throw new Error(error.message);
+    } catch (e) {
+      console.error(`Error: ${(e as Error).message}`);
+    } finally {
+      setLoading(false);
+      setLiked(false);
+      router.refresh();
     }
-    router.refresh();
   };
-  return isLiked ? (
+
+  return loading ? (
+    <Loader2 className="animate-spin text-pink-600/80 size-7" />
+  ) : liked ? (
     <Heart
       onClick={handleunLikePost}
-      className="size-7 text-pink-400 cursor-pointer transition-colors"
+      className="size-7 text-pink-600/80 cursor-pointer transition-colors"
       fill="currentColor"
     />
   ) : (
     <Heart
       onClick={handleLikePost}
-      className="size-7 text-white hover:text-pink-400 cursor-pointer transition-colors"
+      className="size-7 hover:text-pink-600/80 cursor-pointer transition-colors"
       stroke="currentColor"
     />
   );
