@@ -36,7 +36,11 @@ export const fetchUser = async ({ userId }: { userId: string }) => {
 
   const supabase = await createClient();
 
-  return await supabase.from("users").select().eq("id", userId).maybeSingle();
+  return await supabase
+    .from("user_view")
+    .select()
+    .eq("id", userId)
+    .maybeSingle();
 };
 
 export const isFollowing = async ({

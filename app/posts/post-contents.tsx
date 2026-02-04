@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { PostWithUserAndComments } from "@/types/extend";
@@ -21,8 +21,9 @@ export const PostContents = async ({
 
   return (
     <Card className="min-w-0 border-saffron/80 bg-saffron/60 w-full flex flex-col">
-      <CardHeader className="min-w-0 h-12 flex-shrink-0 flex flex-row justify-between items-center text-2xl px-8 gap-8">
+      <CardHeader className="min-w-0 h-12 flex-shrink-0 flex flex-row items-center text-2xl px-8 gap-8">
         <Avatar>
+          <AvatarImage src={post.users?.media_url ?? ""} />
           <AvatarFallback className="text-xs bg-saffron-800/80">
             {post.users?.username?.substring(0, 2).toUpperCase() ?? "?"}
           </AvatarFallback>

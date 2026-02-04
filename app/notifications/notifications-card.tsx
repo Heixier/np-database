@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { NotificationWithSender } from "@/types/tables";
 
@@ -14,6 +14,7 @@ export const NotificationCard = ({
           <CardContent>
             <div className="flex flex-row items-center gap-4">
               <Avatar>
+                <AvatarImage src={notification.sender_media_url ?? ""} />
                 <AvatarFallback>
                   {notification.sender_name?.substring(0, 2).toUpperCase() ??
                     "AN"}

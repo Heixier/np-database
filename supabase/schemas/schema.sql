@@ -10,6 +10,7 @@ create table users (
 	id uuid primary key default uuid_generate_v4(),
 	username text not null,
 	bio text,
+	media_url text,
 	follower_count numeric default 0 not null, -- denormalised for performance; handled by triggers
 	unique(username)
 );
@@ -136,10 +137,10 @@ using (true);
 create index idx_posts_user_id on posts(user_id);
 create index idx_comments_post_id on comments(post_id);
 
-create view notifications_with_sender_name as
+create view notifications_with_sender_details as
 	select notifications.*, 
-	users.username 
-	as sender_name 
+	users.username as sender_name,
+	users.media_url as sender_media_url
 	from notifications 
 	left join users on users.id = notifications.sender_id;
 
@@ -175,8 +176,9 @@ notification_counts as (
 )
 select
 	users.id,
-	users.bio,
 	users.username,
+	users.bio,
+	users.media_url,
 	-- otherwise those with no followers end up with null which makes my frontend harder
 	coalesce(follower_counts.follower_count, 0) as follower_count,
 	coalesce(following_counts.following_count, 0) as following_count,

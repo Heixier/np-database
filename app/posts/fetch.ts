@@ -17,7 +17,9 @@ export const fetchAllPosts = async () => {
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, users!user_id(username), comments (*, users (username))")
+    .select(
+      "*, users!user_id(username, media_url), comments (*, users (username, media_url))",
+    )
     .order("id", { ascending: false });
 
   if (!error) {

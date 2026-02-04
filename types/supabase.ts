@@ -349,25 +349,28 @@ export type Database = {
           bio: string | null
           follower_count: number
           id: string
+          media_url: string | null
           username: string
         }
         Insert: {
           bio?: string | null
           follower_count?: number
           id?: string
+          media_url?: string | null
           username: string
         }
         Update: {
           bio?: string | null
           follower_count?: number
           id?: string
+          media_url?: string | null
           username?: string
         }
         Relationships: []
       }
     }
     Views: {
-      notifications_with_sender_name: {
+      notifications_with_sender_details: {
         Row: {
           content: string | null
           created_at: string | null
@@ -375,6 +378,7 @@ export type Database = {
           post_id: string | null
           read: boolean | null
           sender_id: string | null
+          sender_media_url: string | null
           sender_name: string | null
           type: Database["public"]["Enums"]["notification_type"] | null
           user_id: string | null
@@ -458,6 +462,7 @@ export type Database = {
           follower_count: number | null
           following_count: number | null
           id: string | null
+          media_url: string | null
           unread_notifications: number | null
           username: string | null
         }

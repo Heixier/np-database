@@ -1,14 +1,19 @@
-import { Comment, Post } from "./tables";
+import { Chat, Comment, Post } from "./tables";
 
-export interface UserUsername {
+export interface UserDetails {
   username: string | null;
+  media_url: string | null;
 }
 
 export interface CommentWithUser extends Comment {
-  users: UserUsername | null;
+  users: UserDetails | null;
 }
 
 export interface PostWithUserAndComments extends Post {
-  users: UserUsername | null;
+  users: UserDetails | null;
   comments: CommentWithUser[] | null;
+}
+
+export interface ChatWithUser extends Chat {
+  users: UserDetails | null;
 }

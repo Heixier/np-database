@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -111,6 +111,9 @@ export const CommentCard = ({
               <div>
                 <div className="flex flex-row items-center gap-2 min-w-0">
                   <Avatar className="shrink-0">
+                    <AvatarImage
+                      src={comment.users?.media_url ?? ""}
+                    ></AvatarImage>
                     <AvatarFallback className="text-xs">
                       {comment.users?.username?.substring(0, 2).toUpperCase() ??
                         "?"}
