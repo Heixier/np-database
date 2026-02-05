@@ -87,7 +87,7 @@ create table notifications (
 	post_id uuid references posts (id) on delete cascade,
 	"type" notification_type not null, -- custom user type ;-;
 	content text not null,
-	"read" boolean default false,
+	"read" boolean default false not null,
 	created_at timestamp with time zone default now() 
 );
 
@@ -202,7 +202,7 @@ begin
 	select username into reviewer_name from users where id = new.user_id;
 	-- now to notify the sender
 	if author_id != new.user_id then
-		notification_content := reviewer_name || ' liked one of your posts';
+		notification_content := '@' || reviewer_name || ' liked one of your posts';
 		notif_type := 'like';
 	end if;
 		
@@ -251,7 +251,7 @@ begin
 	select username into follower_name from users where id = new.follower_id;
 
 	insert into notifications (user_id, sender_id, "type", content)
-	values (new.following_id, new.follower_id, 'follow', follower_name || ' is now following you');
+	values (new.following_id, new.follower_id, 'follow', '@' || follower_name || ' is now following you');
 
 	return new;
 end;
@@ -279,11 +279,10 @@ create or replace trigger trigger_delete_follow_notification
 	for each row
 	execute function delete_follow_notification();
 
-
 create or replace function create_post_notification()
 returns trigger language plpgsql as $$
 declare
-	post_author_name text;
+	post_author_name text; -- This part is just for flexing (not the Tailwind kind), I would so much rather render the name separately in frontend
 begin
 	select username into post_author_name from users where id = new.user_id;
 
@@ -298,7 +297,7 @@ begin
 	following_id,
 	new.id,
 	'post',
-	'New post from ' || post_author_name
+	'New post from @' || post_author_name
 	from follows
 	where new.user_id = following_id;
 

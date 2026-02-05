@@ -232,7 +232,7 @@ export type Database = {
           created_at: string | null
           id: string
           post_id: string | null
-          read: boolean | null
+          read: boolean
           sender_id: string | null
           type: Database["public"]["Enums"]["notification_type"]
           user_id: string
@@ -242,7 +242,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           post_id?: string | null
-          read?: boolean | null
+          read?: boolean
           sender_id?: string | null
           type: Database["public"]["Enums"]["notification_type"]
           user_id: string
@@ -252,7 +252,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           post_id?: string | null
-          read?: boolean | null
+          read?: boolean
           sender_id?: string | null
           type?: Database["public"]["Enums"]["notification_type"]
           user_id?: string
