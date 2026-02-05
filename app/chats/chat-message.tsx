@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/context-menu";
 import { cn } from "@/lib/utils";
 import { ChatWithUser } from "@/types/extend";
+import { format } from "date-fns";
 import { Loader2, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -52,9 +53,16 @@ export const ChatMessage = ({
           <Avatar>
             <AvatarImage src={chat.users?.media_url ?? ""}></AvatarImage>
           </Avatar>
-          <div className="flex flex-col">
-            <div className="font-bold">@{chat.users?.username ?? ""}</div>
-            <div className="break-words">{chat.content}</div>
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-row gap-2 items-center">
+              <div className="font-bold">@{chat.users?.username ?? ""}</div>
+              <p className="text-xs opacity-75">
+                {format(chat.created_at, "Pp")}
+              </p>
+            </div>
+            <div className="break-words whitespace-pre-wrap">
+              {chat.content}
+            </div>
           </div>
         </div>
       </ContextMenuTrigger>

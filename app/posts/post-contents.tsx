@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { PostWithUserAndComments } from "@/types/extend";
+import { format } from "date-fns";
 import { CommentCard } from "./comment";
 import { LikeButton } from "./create-like";
 import { DeletePostButton } from "./delete-post";
@@ -49,9 +50,10 @@ export const PostContents = async ({
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4 min-w-0 items-center">
         <Separator className="bg-black/80" />
-        <p className="rounded-md from-neutral-900/90 to-neutral-800/90 bg-gradient-to-tr py-2 px-4 break-words w-full text-left min-w-0 text-white">
-          {post.content}
-        </p>
+        <div className="flex flex-col gap-4 rounded-md from-neutral-900/90 to-neutral-800/90 bg-gradient-to-tr py-2 px-4 break-words whitespace-pre-wrap w-full text-left min-w-0 text-white">
+          <p className="opacity-80">{format(post.created_at, "Pp")}</p>
+          <p>{post.content}</p>
+        </div>
         <Separator className="bg-black/80" />
         <CommentCard currentUserId={currentUserId} post={post}></CommentCard>
       </CardContent>

@@ -29,7 +29,7 @@ export default function DeleteUserButton({
   };
 
   return (
-    <div className="w-fit">
+    <div className="w-fit overflow-hidden">
       {loading ? (
         <Loader2 className="animate-spin w-full" />
       ) : (

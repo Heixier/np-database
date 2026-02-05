@@ -29,10 +29,18 @@ export default async function Home() {
         `bg-[url(/background.jpg)] bg-cover bg-center`,
       )}
     >
-      {profile && profile?.id && <Posts userId={profile.id} />}
-      <Users userId={profile?.id} />
-      {profile && profile?.id && <Notifications userId={profile.id} />}
-      {profile && profile?.id && <Chats userId={profile.id} />}
+      {!profile || !profile.id ? (
+        <div className="col-span-full row-span-full h-full w-full">
+          <Users userId={profile?.id} />
+        </div>
+      ) : (
+        <>
+          <Posts userId={profile.id} />
+          <Users userId={profile?.id} />
+          <Notifications userId={profile.id} />
+          <Chats userId={profile.id} />
+        </>
+      )}
     </main>
   );
 }

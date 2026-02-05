@@ -11,10 +11,10 @@ export default async function Posts({ userId }: { userId: string }) {
   if (postError) return <div>Error retrieving posts: {postError.message}</div>;
 
   return (
-    <Card className="flex flex-col border-none backdrop-blur-md bg-saffron/50 h-full px-4">
+    <Card className="flex flex-col border-none backdrop-blur-sm bg-saffron/50 h-full px-4">
       {/* <PostsAndCommentsAndLikesListener /> */}
       <CardHeader className="flex flex-row items-center justify-between px-2">
-        <CardTitle className="flex flex-row gap-2 items-center text-2xl">
+        <CardTitle className="flex flex-row gap-2 items-center text-2xl py-2 px-4 bg-saffron-600/80 rounded-md">
           <p>Posts</p>
           <StickyNote
             className="fill-white stroke-saffron-600"

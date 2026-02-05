@@ -13,9 +13,9 @@ export default async function Chats({ userId }: { userId: string }) {
   if (!chats) return <div>No chats to load</div>;
 
   return (
-    <Card className="flex flex-col h-full w-full overflow-y-hidden bg-electric_indigo/50 min-w-0 border-none">
+    <Card className="flex flex-col h-full w-full backdrop-blur-sm overflow-y-hidden bg-electric_indigo/50 min-w-0 border-none">
       <CardHeader className="flex flex-row items-center justify-between w-full min-w-0">
-        <CardTitle className="flex flex-row gap-2 items-center text-2xl">
+        <CardTitle className="flex flex-row gap-2 items-center text-2xl rounded-md bg-electric_indigo-600/80 py-2 px-4">
           <p>Chats</p>
           <MessageSquareMore
             className="fill-white stroke-electric_indigo"

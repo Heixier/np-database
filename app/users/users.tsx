@@ -16,13 +16,13 @@ export default async function Users({
   if (!data) return <div>No Users Found</div>;
 
   return (
-    <Card className="border-none backdrop-blur-md bg-pumpkin_spice/50 px-4">
+    <Card className="border-none backdrop-blur-sm bg-pumpkin_spice/50 px-4 h-full">
       {/* <UsersAndFollowsListener /> */}
       <CardHeader className="flex flex-row items-center justify-between px-2">
-        <CardTitle className="flex flex-row gap-2 items-center text-2xl">
+        <CardTitle className="flex flex-row gap-2 items-center text-2xl rounded-md bg-pumpkin_spice-600/80 py-2 px-4">
           <p>Users</p>
           <UserRound
-            className="fill-white stroke-pumpkin_spice-400"
+            className="fill-white stroke-pumpkin_spice-500"
             size={32}
             strokeWidth={2}
           />

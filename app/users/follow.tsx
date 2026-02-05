@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Loader2, UserRoundPlus, UserRoundX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { followUser, unfollowUser } from "./actions";
 
 export const FollowButton = ({
@@ -18,8 +18,13 @@ export const FollowButton = ({
   const [loading, setLoading] = useState(false);
   const [followState, setFollowState] = useState(following);
 
+  useEffect(() => {
+    setFollowState(following);
+  }, [following]);
+
   const router = useRouter();
-  const followHandler = async () => {
+  const followHandler = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     setLoading(true);
     try {
       const { error } = await followUser({
@@ -36,7 +41,8 @@ export const FollowButton = ({
     }
   };
 
-  const unfollowHandler = async () => {
+  const unfollowHandler = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     setLoading(true);
     try {
       const { error } = await unfollowUser({
