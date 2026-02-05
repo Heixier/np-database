@@ -43,7 +43,7 @@ export default function UserSelect({
       <ContextMenuTrigger asChild>
         <Card
           className={cn(
-            "w-0 grow flex-row items-center px-4 border-2 border-transparent",
+            "w-0 grow flex-row items-center px-4 border-2 border-transparent py-2",
             currentUserId === user.id
               ? "from-pumpkin_spice-500 to-pumpkin_spice-700/80 bg-gradient-to-tr"
               : "text-white from-neutral-800 to-neutral-700 bg-gradient-to-tr cursor-pointer hover:border-2 hover:border-pumpkin_spice-400",

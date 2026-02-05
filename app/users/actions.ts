@@ -24,6 +24,7 @@ export const createUser = async (data: {
 export const deleteUser = async ({ userId }: { userId: string }) => {
   const redis = await createRedisClient().connect();
   await redis.del("user_view:all");
+  await redis.del(`notifications:${userId}`);
 
   const supabase = await createClient();
   return await supabase.from("users").delete().eq("id", userId);
@@ -36,11 +37,13 @@ export const followUser = async (data: {
   const redis = await createRedisClient().connect();
   await redis.del("follows:all");
   await redis.del("user_view:all");
+  await redis.del(`notifications:${data.following_id}`);
 
   const supabase = await createClient();
   return await supabase.from("follows").insert(data);
 };
 
+// Imagine coming back to some very similar code 2 weeks later wondering why they're coded differently
 export const unfollowUser = async ({
   follower_id,
   following_id,
@@ -51,6 +54,7 @@ export const unfollowUser = async ({
   const redis = await createRedisClient().connect();
   await redis.del("follows:all");
   await redis.del("user_view:all");
+  await redis.del(`notifications:${following_id}`);
 
   const supabase = await createClient();
   return await supabase

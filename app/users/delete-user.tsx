@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Loader2, Trash2 } from "lucide-react";
+import { Loader2, UserX2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteUser } from "./actions";
@@ -39,7 +39,7 @@ export default function DeleteUserButton({
           disabled={currentUserId !== userId}
           className="w-fit"
         >
-          <Trash2 className="w-fit" />
+          <UserX2 className="w-fit" />
           Delete
         </Button>
       )}

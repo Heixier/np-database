@@ -2,7 +2,7 @@
 
 import { Heart, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { likePost, unlikePost } from "./actions";
 
 export const LikeButton = ({
@@ -18,6 +18,10 @@ export const LikeButton = ({
 
   const [loading, setLoading] = useState(false);
   const [liked, setLiked] = useState(isLiked);
+
+  useEffect(() => {
+    setLiked(isLiked);
+  }, [isLiked]);
 
   const handleLikePost = async () => {
     setLoading(true);
