@@ -23,7 +23,7 @@ export default async function Chats({ userId }: { userId: string }) {
             strokeWidth={2}
           />
         </CardTitle>
-        <ClearChatButton />
+        {chats && chats.length !== 0 && <ClearChatButton />}
       </CardHeader>
       <Card className="flex h-full min-h-0 bg-black/80 mx-4 min-w-0 border-none">
         <CardContent className="flex flex-col min-h-0">

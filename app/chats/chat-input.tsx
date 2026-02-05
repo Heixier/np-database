@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { CornerDownRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { KeyboardEvent, useState } from "react";
 import { sendChatMessage } from "./actions";
@@ -44,10 +44,17 @@ export const ChatInput = ({ userId }: { userId: string }) => {
       <Button
         onClick={handleSendMessage}
         variant="ghost"
-        className="font-bold border-l rounded-none focus:border-none focus-visible:border-none bg-electric_indigo-700"
+        className="font-bold border-l rounded-none focus:border-none focus-visible:border-none bg-neutral-800 text-white"
         disabled={!message}
       >
-        {loading ? <Loader2 className="animate-spin" /> : "Send"}
+        {loading ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          <div className="flex flex-row items-center gap-2">
+            <p>Send</p>
+            <CornerDownRight />
+          </div>
+        )}
       </Button>
     </div>
   );

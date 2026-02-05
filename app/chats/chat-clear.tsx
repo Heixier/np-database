@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, MessageSquareOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { deleteAllChats } from "./actions";
@@ -27,8 +27,14 @@ export default function ClearChatButton() {
   return loading ? (
     <Loader2 className="animate-spin" />
   ) : (
-    <Button variant="destructive" onClick={handleClearChat}>
-      Clear Chat
+    <Button
+      onClick={handleClearChat}
+      className="group opacity-80 hover:opacity-100"
+    >
+      <p className="font-bold text-neutral-400/80 group-hover:text-red-600">
+        Clear Chat
+      </p>
+      <MessageSquareOff className="stroke-neutral-400/80 group-hover:stroke-red-600" />
     </Button>
   );
 }

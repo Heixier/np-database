@@ -47,7 +47,7 @@ export const ChatMessage = ({
             "text-white text-sm items-center flex flex-row mb-4 border-none rounded-lg max-w-[60%] p-2 w-fit gap-2",
             currentUser === chat.user_id
               ? "ml-auto from-electric_indigo-500 to-electric_indigo-600 bg-gradient-to-br pl-2"
-              : "mr-auto from-neutral-700/80 to-neutral-800/60 bg-gradient-to-tr pr-4",
+              : "mr-auto from-neutral-700/60 to-neutral-800/80 bg-gradient-to-tr pr-4",
           )}
         >
           <Avatar>
