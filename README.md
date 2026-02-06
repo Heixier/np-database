@@ -1,14 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<img width="1708" height="1279" alt="image" src="https://github.com/user-attachments/assets/c895a987-7fd7-438d-8604-96817f06ca94" />
 
-npx supabase gen types typescript --local > ./types/supabase.ts
-npx supabase gen types typescript --linked > ./types/supabase.ts
+This is a social media dashboard bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) demonstrating an implementation of postgreSQL and Redis (NoSQL). It currently uses Supabase, Redis, NextJS, Tailwind, and Shadcn + Lucide for styling.
 
-At some point I kinda gave up on local
+API keys will only be provided via private channels (such as email).
 
-npx supabase db diff -f add_tables && npx supabase db reset
-npx supabase migration up --linked
+```npm install```
+```npm run dev```
 
-Note if it's not refreshing automatically it might be Realtime getting disabled in the remote.
-Every time I update the schema and reset the remote database, it resets the Realtime configuration as well.
-
-No idea how to configure it remotely while still maintaining schema.sql portability (skill issue)
+Realtime was originally implemented but eventually scrapped (just commented out) as it wasn't intended to be used frequently by multiple users
