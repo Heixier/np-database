@@ -8,7 +8,4 @@ At some point I kinda gave up on local
 npx supabase db diff -f add_tables && npx supabase db reset
 npx supabase migration up --linked
 
-Note if it's not refreshing automatically it might be Realtime getting disabled in the remote.
-Every time I update the schema and reset the remote database, it resets the Realtime configuration as well.
-
-No idea how to configure it remotely while still maintaining schema.sql portability (skill issue)
+Realtime was originally implemented but I decided it wasn't going to be used too much by multiple users
