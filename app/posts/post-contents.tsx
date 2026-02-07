@@ -40,7 +40,7 @@ export const PostContents = async ({
         </div>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger className="cursor-default">
               <CardTitle className="truncate min-w-0 text-3xl pl-4 flex-1">
                 {post.title}
               </CardTitle>
@@ -48,7 +48,6 @@ export const PostContents = async ({
             <TooltipContent>{post.title}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-
         <div>
           {currentUserId !== post.user_id && (
             <LikeButton
