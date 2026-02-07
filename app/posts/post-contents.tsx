@@ -1,6 +1,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { PostWithUserAndComments } from "@/types/extend";
 import { format } from "date-fns";
 import { CommentCard } from "./comment";
@@ -32,9 +38,17 @@ export const PostContents = async ({
           </Avatar>
           <p className="font-bold truncate text-sm">@{post.users?.username}</p>
         </div>
-        <CardTitle className="truncate min-w-0 text-3xl pl-4 flex-1">
-          {post.title}
-        </CardTitle>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <CardTitle className="truncate min-w-0 text-3xl pl-4 flex-1">
+                {post.title}
+              </CardTitle>
+            </TooltipTrigger>
+            <TooltipContent>{post.title}</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         <div>
           {currentUserId !== post.user_id && (
             <LikeButton
